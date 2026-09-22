@@ -1,0 +1,50 @@
+# Agent Constitution: {{PROJECT_NAME}}
+
+> **Project:** {{PROJECT_NAME}}  
+> **Stack:** {{STACK}}  
+> **Governance:** {{GOVERNANCE_MODE}}  
+> **SDD Plugin:** `sdd-scaffold-plugin` v1.0.0  
+> **Initialized:** {{DATE}}
+
+---
+
+## Project Identity
+
+You are an AI pair programmer working on the **{{PROJECT_NAME}}** project. This project follows **Spec-Driven Development (SDD)** enforced by the global `sdd-scaffold-plugin`.
+
+## Inherited Plugin
+
+This project inherits all rules, skills, and subagent personas from `sdd-scaffold-plugin`. See `.agents/plugins.json` for the reference.
+
+## Project-Specific Overrides
+
+Add project-specific rules in `.agents/rules/` directory. These take precedence over the global plugin rules.
+
+**Example project-specific rules you might add:**
+- `.agents/rules/local-conventions.md` — Coding style, naming conventions specific to {{PROJECT_NAME}}.
+- `.agents/rules/local-stack.md` — Stack-specific constraints (e.g., required libraries, forbidden patterns).
+- `.agents/rules/local-security.md` — Security policies specific to this project's threat model.
+
+## Specs Directory
+
+All SDD artifacts for this project live in `{{SPECS_DIR}}/`. The canonical artifact chain for each feature is:
+
+```
+{{SPECS_DIR}}/
+└── <feature-name>/
+    ├── spec.md               # Specification (Gate 1)
+    ├── implementation_plan.md # Plan (Gate 2)
+    ├── tasks.md              # Atomic task checklist
+    └── walkthrough.md        # Post-implementation evidence
+```
+
+## Quick Reference
+
+| I want to... | Activate... |
+|---|---|
+| Start a new feature from scratch | `sdd-cycle-orchestrator` |
+| Write a spec for a feature | `spec-architect` |
+| Plan implementation of an approved spec | `implementation-planner` |
+| Start TDD implementation | `tdd-enforcer` |
+| Build a compatible stack skill | `stack-contract` |
+

@@ -1,0 +1,99 @@
+---
+id: {{FEATURE_ID}}-walkthrough
+type: walkthrough
+status: done
+feature: {{FEATURE_NAME}}
+depends_on: [{{FEATURE_ID}}-tasks]
+verified_by: []
+tags: []
+created_at: {{DATE}}
+updated_at: {{DATE}}
+---
+
+# {{FEATURE_NAME}} — Implementation Walkthrough
+
+> **Spec reference:** `{{FEATURE_ID}}-spec`  
+> **Plan reference:** `{{FEATURE_ID}}-plan`  
+> **Tasks reference:** `{{FEATURE_ID}}-tasks`
+
+---
+
+## Summary of Changes
+
+> Describe what was built, the key design decisions made during implementation,
+> and any deviations from the original plan (with justification).
+
+### What was implemented
+[Description of the feature as delivered]
+
+### Design decisions made during implementation
+- [Decision 1 and rationale]
+- [Decision 2 and rationale]
+
+### Deviations from the plan (if any)
+| Planned | Actual | Reason |
+|---|---|---|
+| [Original approach] | [What was done instead] | [Why the deviation was necessary] |
+
+---
+
+## Files Changed
+
+| File | Change | Description |
+|---|---|---|
+| `path/to/file.ts` | [NEW] | [What was added and why] |
+| `path/to/other.ts` | [MODIFY] | [What was changed and why] |
+| `path/to/old.ts` | [DELETE] | [Why this was removed] |
+
+---
+
+## Test Evidence
+
+### Test Results
+
+```
+# Paste test output here
+$ npm test
+
+  ✓ [Test name 1] (Xms)
+  ✓ [Test name 2] (Xms)
+  ✓ [Test name 3] (Xms)
+
+  X passing (Xms)
+```
+
+### Security Audit Results
+> Paste output from `security-auditor` subagent.
+
+```
+Status: PASS
+No CRITICAL or HIGH findings.
+```
+
+### Dependency Audit Results
+> Paste output from `dependency-auditor` subagent.
+
+```
+Status: PASS
+No vulnerable dependencies found.
+```
+
+---
+
+## Acceptance Criteria Verification
+
+| Scenario (from spec) | Status | Notes |
+|---|---|---|
+| Scenario 1: [Happy Path] | ✅ Verified | Tested via integration test `[test name]` |
+| Scenario 2: [Error Path] | ✅ Verified | Tested via unit test `[test name]` |
+| Scenario 3: [Edge Case] | ✅ Verified | Manual verification |
+
+---
+
+## Open Issues / Follow-up
+
+> List any known issues, technical debt items, or follow-up features discovered during implementation.
+
+- [ ] [Follow-up item 1 — create a new spec for this if needed]
+- [ ] [Known limitation or tech debt item]
+

@@ -1,0 +1,96 @@
+---
+id: {{FEATURE_ID}}-spec
+type: spec
+status: draft
+feature: {{FEATURE_NAME}}
+depends_on: []
+verified_by: []
+tags: []
+created_at: {{DATE}}
+updated_at: {{DATE}}
+---
+
+# {{FEATURE_NAME}} — Specification
+
+## 1. Overview & Problem Statement
+
+> Describe the context, the user or business problem being solved, and why it matters.
+> Who is the primary user? What pain point does this feature address?
+
+**User story:** As a [role], I want to [action], so that [outcome].
+
+## 2. Non-Negotiable Principles & Constraints
+
+> List technologies, libraries, security requirements, compliance rules, or performance targets
+> that are fixed and cannot be changed by implementation decisions.
+
+- **Required technologies:** _e.g., must use PostgreSQL, must be REST (not GraphQL)_
+- **Security constraints:** _e.g., all endpoints require JWT authentication_
+- **Performance targets:** _e.g., response time < 200ms at p95_
+- **Compliance:** _e.g., GDPR — no PII logged_
+- **Forbidden approaches:** _e.g., no direct database access from controller layer_
+
+## 3. Acceptance Criteria (Gherkin Format)
+
+> Each scenario MUST follow the Given-When-Then structure.
+> Cover: happy path, error paths, edge cases, and boundary conditions.
+
+### Scenario 1: [Happy Path Name]
+
+- **Given** [precondition — the system state before the action]
+- **When** [action — what the user or system does]
+- **Then** [expected outcome — what the system must do in response]
+- **And** [additional assertion if needed]
+
+### Scenario 2: [Error Path Name]
+
+- **Given** [precondition]
+- **When** [action that triggers the error]
+- **Then** [expected error response — be specific: HTTP status, error code, message format]
+
+### Scenario 3: [Edge Case Name]
+
+- **Given** [edge case precondition]
+- **When** [action]
+- **Then** [expected behavior at the boundary]
+
+> _Add more scenarios as needed. Every acceptance criterion must be testable._
+
+## 4. Data Model & API Contract (if applicable)
+
+> Define the shape of data BEFORE planning implementation. This is the contract.
+
+### Request Schema
+```json
+{
+  "field": "type — description"
+}
+```
+
+### Response Schema
+```json
+{
+  "field": "type — description"
+}
+```
+
+### API Endpoint (if applicable)
+```
+METHOD /api/v1/resource
+```
+
+## 5. Out of Scope
+
+> Explicitly list what this feature does NOT cover. This prevents scope creep.
+
+- [Item that might seem related but is explicitly excluded]
+- [Future enhancement deferred to a later spec]
+
+## 6. Open Questions
+
+> List any unresolved questions that could block implementation or change the spec.
+> Resolve all questions before advancing to Gate 1.
+
+- [ ] [Question 1 — who is responsible for answering?]
+- [ ] [Question 2]
+

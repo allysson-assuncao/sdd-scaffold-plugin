@@ -1,0 +1,6 @@
+{
+  "name": "sdd-scaffold-plugin",
+  "version": "1.0.0",
+  "description": "Global Spec-Driven Development (SDD) plugin for Google Antigravity. Enforces the SDD lifecycle with approval gates, TDD discipline, and structured Agentic RAG artifacts. Bootstraps .agents/ scaffolding for any project.",
+  "author": "sdd-scaffold-plugin contributors"
+}

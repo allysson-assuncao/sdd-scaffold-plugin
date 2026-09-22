@@ -1,0 +1,66 @@
+---
+id: {{FEATURE_ID}}-tasks
+type: tasks
+status: draft
+feature: {{FEATURE_NAME}}
+depends_on: [{{FEATURE_ID}}-plan]
+verified_by: [{{FEATURE_ID}}-walkthrough]
+tags: []
+created_at: {{DATE}}
+updated_at: {{DATE}}
+---
+
+# {{FEATURE_NAME}} — Task List
+
+> **Plan reference:** `{{FEATURE_ID}}-plan` (must have `status: approved` before tasks begin)  
+> **Convention:** Mark tasks `[/]` when in progress, `[x]` when complete. Update `updated_at` on every save.
+
+---
+
+## Phase 1: Preparation & Domain Modeling
+
+- [ ] Define and document all data interfaces and contracts (no implementation code yet)
+- [ ] Create database migration files (if applicable)
+- [ ] Set up any required environment variables or configuration entries
+- [ ] Verify all dependencies and libraries are available
+
+## Phase 2: TDD — Red Phase (Write Failing Tests First)
+
+> **Rule:** Do NOT write any production code in this phase. Tests must fail first.
+
+- [ ] Write unit test for [domain entity or use case] — expect failure
+- [ ] Write unit test for [second domain entity or use case] — expect failure
+- [ ] Write integration test for [API endpoint or service boundary] — expect failure
+
+## Phase 3: TDD — Green Phase (Minimum Implementation to Pass Tests)
+
+> **Rule:** Write only the minimum code needed to make each test pass. No gold-plating.
+
+- [ ] Implement [domain entity or use case] — make unit test pass
+- [ ] Implement [second domain entity or use case] — make unit test pass
+- [ ] Implement [API endpoint or service boundary] — make integration test pass
+
+## Phase 4: Refactor
+
+> **Rule:** All tests must remain passing after each refactor step.
+
+- [ ] Refactor [component] for readability and maintainability
+- [ ] Ensure code meets project conventions (naming, comments, documentation)
+- [ ] Remove any duplication introduced during Green phase
+
+## Phase 5: Integration & End-to-End Verification
+
+- [ ] Run full test suite — all tests must be green
+- [ ] Manually test the happy path scenario from the spec
+- [ ] Manually test at least one error path scenario
+- [ ] Invoke `security-auditor` subagent — resolve any CRITICAL or HIGH findings
+- [ ] Invoke `dependency-auditor` subagent — resolve any vulnerable dependencies
+
+## Phase 6: Documentation & Closeout
+
+- [ ] Write `walkthrough.md` with summary of changes, test evidence, and diff
+- [ ] Update `status` in `{{FEATURE_ID}}-spec` to `done`
+- [ ] Update `status` in `{{FEATURE_ID}}-plan` to `done`
+- [ ] Update `verified_by` in spec and plan with walkthrough `id`
+- [ ] Create PR / commit with reference to spec `id`: `feat({{FEATURE_ID}}): ...`
+

@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "sdd-filesystem-search": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "enabled": false,
+      "_comment_enabled": "Set to true to enable semantic file search over specs and plans. Requires Node.js.",
+      "_comment_purpose": "Provides the agent with MCP-based file system search tools, enabling richer cross-document RAG queries over large spec corpora. For most projects, the YAML front-matter traversal in rules/03-agentic-rag.md is sufficient without this server.",
+      "_comment_activation": "To activate: set enabled=true and ensure Node.js is installed. Then restart Antigravity."
+    }
+  }
+}
