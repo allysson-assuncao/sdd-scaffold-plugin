@@ -36,7 +36,8 @@ sdd-scaffold-plugin/                              (repository root — already e
     │   └── resources/
     │       ├── sdd-stack-contract.md             [NEW] template
     │       ├── openspec-proposal.md              [NEW] template
-    │       └── openspec-tasks.md                 [NEW] template
+    │       ├── openspec-tasks.md                 [NEW] template
+    │       └── spec-template.md                  [NEW] template
     ├── sdd-spec-create/
     │   ├── SKILL.md                              [NEW]
     │   └── resources/
@@ -46,10 +47,11 @@ sdd-scaffold-plugin/                              (repository root — already e
     └── sdd-skill-creator/
         ├── SKILL.md                              [NEW]
         └── resources/
-            └── skill-template.md                [NEW] template
+            ├── skill-template.md                [NEW] template
+            └── agent-template.md                [NEW] template
 ```
 
-**Total: 14 new files across 10 directories.**
+**Total: 16 new files across 10 directories.**
 
 ---
 
@@ -136,9 +138,20 @@ Before performing any structural code change (adding, renaming, or deleting file
 - Never inline the full content of a skill into your response. Activate skills on demand.
 - When referencing a spec or task file, read it; do not guess its contents.
 
+## Version Control
+- ALL files created inside `.agents/` and `openspec/` MUST be committed to Git.
+- Never write runtime caches, indexes, or ephemeral outputs into these directories.
+
 ## Archival Gate
 - A change may only be archived via `sdd-spec-archive` after ALL tasks in `tasks.md` are marked `[x]`.
 - Incomplete tasks block archival unconditionally.
+
+## Anti-Patterns (DO NOT)
+- DO NOT place business specs (proposal.md, tasks.md) inside `.agents/`.
+- DO NOT place agent configs (SKILL.md, AGENTS.md, agent definitions) inside `openspec/`.
+- DO NOT inline the full body of a skill or spec file into a chat response.
+- DO NOT modify `openspec/specs/` directly — always go through `openspec/changes/`.
+- DO NOT commit runtime caches or engine indexes (e.g., `.antigravity/`) to Git.
 ```
 
 ---
@@ -240,7 +253,39 @@ Before creating any directory, check whether `.agents/` or `openspec/` already e
 - If **neither exists**: proceed without prompting.
 - If **either exists**: STOP. Warn the user: "Directory `<name>/` already exists. Initializing again may overwrite existing configuration. Confirm to proceed (yes/no)?" Do not proceed until the user explicitly confirms.
 
-## Step 2 — Create Agent Configuration Namespace (`.agents/`)
+## Step 2 — Executive Summary & Confirmation
+
+Before creating any directories or files, display the following execution plan and request explicit confirmation from the user:
+
+```
+📋 SDD Scaffold — Execution Plan
+
+Workspace: <workspace-root>
+
+Directories to create:
+  .agents/
+  .agents/rules/
+  .agents/agents/
+  .agents/skills/
+  openspec/
+  openspec/specs/
+  openspec/changes/
+  openspec/archive/
+  openspec/changes/_example/
+  openspec/changes/_example/specs/
+
+Files to seed:
+  openspec/specs/sdd-stack-contract.md
+  openspec/specs/_template.md
+  openspec/changes/_example/proposal.md
+  openspec/changes/_example/tasks.md
+
+Confirm? (yes / no)
+```
+
+Do NOT proceed to Step 3 until the user explicitly confirms with "yes". If the user says "no", STOP and ask what they would like to change.
+
+## Step 3 — Create Agent Configuration Namespace (`.agents/`)
 
 Create the following directories (create parent directories as needed):
 
@@ -253,7 +298,7 @@ Create the following directories (create parent directories as needed):
 
 No files are created inside `.agents/` at this stage. The directories serve as mount points for future workspace-level customizations.
 
-## Step 3 — Create Specification Namespace (`openspec/`)
+## Step 4 — Create Specification Namespace (`openspec/`)
 
 Create the following directories:
 
@@ -266,17 +311,18 @@ Create the following directories:
 <workspace-root>/openspec/changes/_example/specs/
 ```
 
-## Step 4 — Seed Templates
+## Step 5 — Seed Templates
 
 Copy the following template files from this skill's `resources/` directory into the workspace. Read each resource file and write its contents to the destination path:
 
 | Source (relative to this SKILL.md) | Destination (relative to workspace root) |
 |---|---|
 | `resources/sdd-stack-contract.md` | `openspec/specs/sdd-stack-contract.md` |
+| `resources/spec-template.md` | `openspec/specs/_template.md` |
 | `resources/openspec-proposal.md` | `openspec/changes/_example/proposal.md` |
 | `resources/openspec-tasks.md` | `openspec/changes/_example/tasks.md` |
 
-## Step 5 — Confirm
+## Step 6 — Confirm
 
 After all directories and files are created, output a confirmation summary:
 
@@ -297,6 +343,7 @@ Created directories:
 
 Seeded templates:
   openspec/specs/sdd-stack-contract.md
+  openspec/specs/_template.md
   openspec/changes/_example/proposal.md
   openspec/changes/_example/tasks.md
 
@@ -479,6 +526,57 @@ Next step: Use the sdd-spec-create skill to open your first change proposal.
 
 ---
 
+### 2.1.5 — `skills/sdd-init/resources/spec-template.md`
+
+**Path:** `c:/Users/anybo/Documents/Projects/sdd-scaffold-plugin/skills/sdd-init/resources/spec-template.md`
+
+```markdown
+---
+id: "<spec-id>"
+title: "<Readable Title of This Living Specification>"
+version: "1.0.0"
+status: "draft"
+owners:
+  - "<!-- @handle or team name -->"
+scope:
+  paths:
+    - "<!-- e.g. src/module/** -->"
+resources: []
+---
+
+# <Spec Title> — Living Specification
+
+> This is the authoritative source of truth for this module's current functional state.
+> Update this file only after merging a completed change from `openspec/changes/`.
+
+---
+
+## Context & Objectives
+
+<!-- One paragraph describing the domain, the problem this module solves, and its long-term goals. -->
+
+## Functional Requirements
+
+- **[RF-01]** <!-- Description of functional requirement 1. -->
+- **[RF-02]** <!-- Description of functional requirement 2. -->
+
+## Non-Functional Requirements
+
+- **[RNF-01]** <!-- e.g. Response time < 200ms at p99 load. -->
+
+## Out of Scope
+
+<!-- List items that are explicitly NOT governed by this spec. -->
+
+## Revision History
+
+| Version | Date | Author | Summary |
+|---------|------|--------|---------|
+| 1.0.0 | <!-- YYYY-MM-DD --> | <!-- @handle --> | Initial draft |
+```
+
+---
+
 ### 2.2 — Skill: `sdd-spec-create`
 
 #### 2.2.1 — `skills/sdd-spec-create/SKILL.md`
@@ -519,7 +617,30 @@ If the user provides a name that violates these rules, suggest a corrected versi
 
 Check that `openspec/changes/<change-id>/` does NOT already exist. If it does, STOP and warn: "A change with ID `<change-id>` already exists. Choose a different ID or open the existing change."
 
-## Step 2 — Scaffold Change Directory
+## Step 2 — Executive Summary & Confirmation
+
+Before creating any directories or files, display the following execution plan and request explicit confirmation from the user:
+
+```
+📋 New Change Proposal — Execution Plan
+
+Change ID:  <change-id>
+Workspace:  <workspace-root>
+
+Directories to create:
+  openspec/changes/<change-id>/
+  openspec/changes/<change-id>/specs/
+
+Files to create:
+  openspec/changes/<change-id>/proposal.md  (populated from proposal-template.md)
+  openspec/changes/<change-id>/tasks.md     (fresh task checklist)
+
+Confirm? (yes / no)
+```
+
+Do NOT proceed to Step 3 until the user explicitly confirms with "yes". If the user says "no", STOP and ask what they would like to change.
+
+## Step 3 — Scaffold Change Directory
 
 Create the following directories and files:
 
@@ -566,7 +687,7 @@ openspec/changes/<change-id>/specs/
 - [ ] Ready for `sdd-spec-archive`
 ```
 
-## Step 3 — Optional: Code Impact Analysis
+## Step 4 — Optional: Code Impact Analysis
 
 Ask the user: "Would you like me to scan the codebase for files and symbols likely impacted by this change? (yes/no)"
 
@@ -575,7 +696,7 @@ Ask the user: "Would you like me to scan the codebase for files and symbols like
   2. Create stub files in `openspec/changes/<change-id>/specs/` named `<filename>-delta.md` for each impacted file, using the format shown in `resources/proposal-template.md`.
 - If **no**: Skip this step.
 
-## Step 4 — Confirm
+## Step 5 — Confirm
 
 Output a confirmation summary:
 
@@ -812,8 +933,10 @@ Guide the user through creating a well-formed Antigravity 2.0 skill or rule that
 Ask the user: "What would you like to create?"
 - **Option A: Skill** — A multi-step procedural guide stored in `skills/<name>/SKILL.md`.
 - **Option B: Rule (AGENTS.md)** — An always-on directive stored as `rules/AGENTS.md` or directly as `AGENTS.md` in a directory.
+- **Option C: Subagent** — A specialized read-only or task-scoped subagent stored as `agents/<name>.md`.
 
 If the user chooses **Option B (Rule)**, skip to the Rule Creation section below.
+If the user chooses **Option C (Subagent)**, skip to the Subagent Creation section below.
 
 ## Step 2 — Gather Skill Metadata (Skills only)
 
@@ -896,6 +1019,40 @@ If the user chose to create a **Rule**:
 
 5. Confirm: "✅ Rule file created/updated at `<path>`."
 
+---
+
+## Subagent Creation (Option C)
+
+If the user chose to create a **Subagent**:
+
+1. Ask the user for the following, one question at a time:
+   - **Subagent name**: Must be kebab-case (e.g., `code-reviewer`, `test-runner`). Must start with a letter.
+   - **Short description**: 1-3 sentences in third person. Describe the subagent's role and when the parent agent should invoke it.
+   - **Tool set**: Which tools should this subagent use? Select from: `view_file`, `grep_search`, `find_by_name`, `run_command`, `write_to_file`, `replace_file_content`. For a read-only subagent, select only `view_file`, `grep_search`, `find_by_name`.
+   - **Target location**: `workspace` (`.agents/agents/<name>.md`) or `global` (`~/.gemini/config/agents/<name>.md`).
+
+2. Resolve the target path based on location choice.
+
+3. Check that the file does NOT already exist. If it does, STOP: "A subagent named `<name>` already exists at `<path>`. Choose a different name or edit the existing subagent."
+
+4. Create `<target-path>/<name>.md` by reading `resources/agent-template.md` and substituting:
+   - `{{AGENT_NAME}}` → the subagent name.
+   - `{{AGENT_DESCRIPTION}}` → the description provided by the user.
+   - `{{AGENT_TOOLS}}` → the selected tool list formatted as a YAML sequence.
+
+5. Remind the user:
+   ```
+   📋 Subagent Best Practices (Antigravity 2.0)
+
+   1. Keep subagents narrowly scoped — one responsibility per subagent.
+   2. Use `model: flash` for read-only or lightweight tasks to reduce cost.
+   3. Set `commandExecutionPolicy: sandbox` if the subagent must not run shell commands.
+   4. Always set `subagent: true` and `mainAgent: false` in the frontmatter.
+   5. Never give a subagent more tools than it needs (principle of least privilege).
+   ```
+
+6. Confirm: "✅ Subagent `<name>` created at `<path>`."
+
 ## Notes
 - Do NOT register the skill in `plugins.json` or `skills.json` automatically. Inform the user that workspace skills placed in `.agents/skills/` are auto-discovered.
 - Do NOT modify any existing skill files other than the one being created.
@@ -961,9 +1118,40 @@ Next step: [What the user should do next]
 
 ---
 
+### 2.4.3 — `skills/sdd-skill-creator/resources/agent-template.md`
+
+**Path:** `c:/Users/anybo/Documents/Projects/sdd-scaffold-plugin/skills/sdd-skill-creator/resources/agent-template.md`
+
+```markdown
+---
+name: {{AGENT_NAME}}
+description: >-
+  {{AGENT_DESCRIPTION}}
+tools:
+{{AGENT_TOOLS}}
+subagent: true
+mainAgent: false
+model: flash
+commandExecutionPolicy: sandbox
+---
+
+# {{AGENT_NAME}}
+
+You are a specialized subagent. Your sole responsibility is described in your task prompt.
+
+## Constraints
+
+- Operate only with the tools listed in your frontmatter.
+- Do NOT hallucinate file contents. Only report what you can verify by reading actual files.
+- If a file or symbol is not found, say so explicitly — do not guess.
+- Return a concise, structured Markdown report to the parent agent upon completion.
+```
+
+---
+
 ## Phase 3 — Validation
 
-After all 14 files are written, run the following validation checks **in order**. Each check must pass before moving to the next.
+After all 16 files are written, run the following validation checks **in order**. Each check must pass before moving to the next.
 
 ### Check 1 — Directory Tree
 
