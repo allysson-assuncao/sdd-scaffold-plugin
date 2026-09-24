@@ -1,0 +1,5 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "sdd-scaffold-plugin",
+  "description": "Universal SDD scaffold plugin for Antigravity 2.0. Provisions openspec/ lifecycle, conventions, and skills for spec-driven agent development in any repository."
+}
