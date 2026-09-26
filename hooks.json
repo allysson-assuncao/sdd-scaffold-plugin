@@ -1,1 +1,18 @@
-{}
+{
+  "$schema": "https://antigravity.google/schemas/v1/hooks.json",
+  "_comment": "SDD Scaffold Plugin — Lifecycle Hook Recipes. These are RECIPE STUBS. Uncomment and configure the hooks you need. Each hook entry requires a 'matcher' (tool name or glob) and a 'command' (shell script path relative to workspace root). All commands must exit 0 to allow the tool call to proceed.",
+  "PreToolUse": [
+    {
+      "_comment_disabled": "RECIPE: Block write tools when no approved proposal exists. Requires a script at .agents/hooks/check-approved-proposal.sh that exits 1 if openspec/changes/ has no proposal with Status: approved.",
+      "_disabled_matcher": "write_to_file|replace_file_content|run_command",
+      "_disabled_command": ".agents/hooks/check-approved-proposal.sh"
+    }
+  ],
+  "PostToolUse": [
+    {
+      "_comment_disabled": "RECIPE: Run linter after file writes. Requires a script at .agents/hooks/run-linter.sh configured per sdd-stack-contract.md linter command.",
+      "_disabled_matcher": "write_to_file|replace_file_content",
+      "_disabled_command": ".agents/hooks/run-linter.sh"
+    }
+  ]
+}
