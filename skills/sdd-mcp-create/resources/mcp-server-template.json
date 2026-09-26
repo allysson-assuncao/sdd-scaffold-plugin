@@ -1,0 +1,18 @@
+{
+  "_comment": "MCP Server configuration template. Two transport variants shown.",
+  "mcpServers": {
+    "stdio-example": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-example"],
+      "env": {
+        "API_KEY": "$MCP_EXAMPLE_API_KEY"
+      }
+    },
+    "sse-example": {
+      "url": "http://localhost:8080/sse",
+      "headers": {
+        "Authorization": "Bearer $MCP_EXAMPLE_TOKEN"
+      }
+    }
+  }
+}
