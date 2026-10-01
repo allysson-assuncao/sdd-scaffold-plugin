@@ -101,14 +101,30 @@ openspec/changes/<change-id>/specs/
 - [ ] Ready for `sdd-spec-archive`
 ```
 
-## Step 4 — Optional: Code Impact Analysis
+## Step 4 — Mandatory Code Impact Analysis
 
-Ask the user: "Would you like me to scan the codebase for files and symbols likely impacted by this change? (yes/no)"
+Invoke the `sdd-code-explorer` subagent to scan the codebase for files and symbols affected by this change. This step is **mandatory and cannot be skipped**.
 
-- If **yes**: Invoke the `sdd-code-explorer` subagent (or the native `research` subagent if `sdd-code-explorer` is unavailable) with the proposal summary as the task prompt. Use the returned report to:
-  1. Populate the "Proposed Solution" section of `proposal.md` with the list of impacted files.
-  2. Create stub files in `openspec/changes/<change-id>/specs/` named `<filename>-delta.md` for each impacted file, using the format shown in `resources/proposal-template.md`.
-- If **no**: Skip this step.
+Use `invoke_subagent` with:
+- `TypeName`: `"sdd-code-explorer"`
+- `Role`: `"Code Impact Scanner for <change-id>"`
+- `Prompt`: The full text of the Summary and Proposed Solution sections from the newly created `proposal.md`, plus the workspace root path.
+
+Wait for the subagent's structured report. When received:
+1. Populate the `### Impacted Files` table in `openspec/changes/<change-id>/proposal.md` with the files and reasons from the report.
+2. For each impacted file listed, create a stub file at `openspec/changes/<change-id>/specs/<filename>-delta.md` using the format:
+   ```markdown
+   # Delta Spec: `<filename>`
+
+   > **Change ID:** `<change-id>`
+   > **File:** `<full/path/to/file>`
+   > **Change Type:** Modify | Create | Delete
+
+   ## Changes Description
+   <!-- Describe what changes in this file. Include new/modified function signatures, types, endpoints, etc. -->
+   ```
+
+If `sdd-code-explorer` is unavailable, fall back to the native `research` subagent with the same prompt, and note in the proposal that the scan was performed by the research subagent.
 
 ## Step 5 — Confirm
 

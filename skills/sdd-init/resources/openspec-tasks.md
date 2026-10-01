@@ -14,10 +14,21 @@
 - [ ] <!-- Task 2 -->
 - [ ] <!-- Task 3 -->
 
-## Test Tasks
+## Security Validation Tasks
 
-- [ ] <!-- e.g. "Write unit tests for UserAuthService.login()" -->
-- [ ] <!-- e.g. "Write integration test for POST /auth/login endpoint" -->
+- [ ] <!-- Verify input validation is implemented as described in proposal's Security section -->
+- [ ] <!-- Confirm no secrets are hardcoded (run: grep -r "password\|secret\|token" src/ --include="*.ts") -->
+- [ ] <!-- Verify authorization checks are in place for all new endpoints -->
+
+## Shift-Left Test Suite Tasks
+
+### Happy Path
+- [ ] <!-- e.g. "Write unit test TP-01: UserAuthService.login() with valid credentials" -->
+- [ ] <!-- e.g. "Write integration test TP-02: POST /auth/login returns 200 with valid JWT" -->
+
+### Edge Cases & Failure Modes
+- [ ] <!-- e.g. "Write unit test TE-01: UserAuthService.login() with null password throws ValidationError" -->
+- [ ] <!-- e.g. "Write test TE-02: POST /auth/login with expired token returns 401" -->
 
 ## Documentation Tasks
 
@@ -27,6 +38,7 @@
 ## Review Gate
 
 - [ ] All implementation tasks complete
+- [ ] All security validation tasks complete
 - [ ] All tests passing (`<test command>`)
-- [ ] Proposal acceptance criteria verified
+- [ ] Proposal acceptance criteria verified (run sdd-spec-validate)
 - [ ] Ready for `sdd-spec-archive`

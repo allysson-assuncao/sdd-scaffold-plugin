@@ -1,0 +1,17 @@
+{
+  "_comment": "Hook entry recipe. Copy the relevant entry into hooks.json under the appropriate event key.",
+  "PreToolUse_example": {
+    "matcher": "write_to_file|replace_file_content",
+    "command": ".agents/hooks/check-approved-proposal.sh"
+  },
+  "PostToolUse_example": {
+    "matcher": "write_to_file|replace_file_content",
+    "command": ".agents/hooks/run-linter.sh"
+  },
+  "PreInvocation_example": {
+    "command": ".agents/hooks/pre-session-check.sh"
+  },
+  "PostInvocation_example": {
+    "command": ".agents/hooks/post-session-cleanup.sh"
+  }
+}
