@@ -6,6 +6,11 @@
       "_comment_disabled": "RECIPE: Block write tools when no approved proposal exists. Requires a script at .agents/hooks/check-approved-proposal.sh that exits 1 if openspec/changes/ has no proposal with Status: approved.",
       "_disabled_matcher": "write_to_file|replace_file_content|run_command",
       "_disabled_command": ".agents/hooks/check-approved-proposal.sh"
+    },
+    {
+      "_comment_disabled": "RECIPE: Scope sdd-prompt-architect writes to prompt-*.md in project root. Requires caller context check in .agents/hooks/scope-prompt-writes.sh; disabled globally to avoid blocking valid writes from other agents.",
+      "_disabled_matcher": "write_to_file",
+      "_disabled_command": ".agents/hooks/scope-prompt-writes.sh"
     }
   ],
   "PostToolUse": [

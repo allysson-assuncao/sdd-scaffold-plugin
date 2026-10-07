@@ -57,4 +57,24 @@ Registro cumulativo da execução do plano de implementação da feature `feat-s
 ### Handoff para a Fase 3
 - A Fase 3 abordará o endurecimento do escopo de escrita (`write-scope hardening`) avaliando `hooks.json`.
 
+---
+
+## Fase 3 — Endurecimento do Escopo de Escrita (Hooks)
+
+### Arquivos Criados / Modificados
+- `hooks.json` — Adicionado recipe stub desabilitado em `PreToolUse` documentando o hook de restrição de escrita de prompt (`scope-prompt-writes.sh`).
+- `openspec/changes/feat-sdd-prompt-architect/tasks.md` — Atualizado com as tarefas da Fase 3 marcadas como completas.
+
+### Análise de Limitações e Decisão de Design
+- A arquitetura de hooks do Antigravity executa comandos externos via matcher de ferramentas. Como o contexto do agente chamador (`caller subagent`) não é isolado de forma padronizada em variáveis de ambiente nativas globais sem sidecar, a ativação de um bloqueio incondicional de escrita quebraria operações legítimas de outros agentes e skills.
+- Conforme instruído no plano e na decisão de design, evitou-se a ativação de um bloqueio global indiscriminado; em vez disso, adicionou-se a receita documentada no `hooks.json` e a restrição de escopo de escrita é garantida de forma rígida através das instruções de sistema (`Hard limits`) no arquivo do agente `sdd-prompt-architect.md` e na ausência da ferramenta `run_command`.
+
+### Resultados de Verificação
+- `hooks.json` validado via `ConvertFrom-Json` com sintaxe JSON 100% íntegra.
+- Hooks pré-existentes preservados intactos.
+
+### Handoff para a Fase 4
+- A Fase 4 atualizará `validate-v3.sh` e `plugin.json` para registro e execução da suíte completa de validação.
+
+
 

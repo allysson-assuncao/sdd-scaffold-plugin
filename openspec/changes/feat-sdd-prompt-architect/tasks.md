@@ -20,9 +20,9 @@
 - [x] Local commit: `feat(agent): add sdd-prompt-architect`
 
 ## Phase 3 — Write-Scope Hardening (Hooks)
-- [ ] Evaluate and configure write-scope PreToolUse hook in `hooks.json`
-- [ ] Verification: parse `hooks.json` and ensure valid JSON schema
-- [ ] Local commit: `feat(hooks): scope sdd-prompt-architect writes` (or record limitation)
+- [x] Evaluate and configure write-scope PreToolUse hook in `hooks.json`
+- [x] Verification: parse `hooks.json` and ensure valid JSON schema
+- [x] Local commit: `feat(hooks): scope sdd-prompt-architect writes` (or record limitation)
 
 ## Phase 4 — Registration & Validation
 - [ ] Update `validate-v3.sh` to include `sdd-prompt-craft`, `sdd-prompt-architect`, and resource checks
