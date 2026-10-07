@@ -26,7 +26,7 @@ echo ""
 
 # --- [1] YAML Frontmatter: All new SKILL.md files ---
 echo "[1] YAML Frontmatter Checks"
-for skill in sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create; do
+for skill in sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft; do
   FILE="$ROOT/skills/$skill/SKILL.md"
   check "skills/$skill/SKILL.md — exists" "[ -f \"$FILE\" ]"
   check "skills/$skill/SKILL.md — has 'name:' frontmatter" "grep -q '^name:' \"$FILE\""
@@ -36,7 +36,7 @@ done
 # --- [2] SKILL.md line count < 500 ---
 echo ""
 echo "[2] SKILL.md Line Count Checks (< 500 lines each)"
-for skill in sdd-init sdd-spec-create sdd-spec-archive sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create; do
+for skill in sdd-init sdd-spec-create sdd-spec-archive sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft; do
   FILE="$ROOT/skills/$skill/SKILL.md"
   if [ -f "$FILE" ]; then
     LINES=$(wc -l < "$FILE")
@@ -54,7 +54,7 @@ check "rules/AGENTS.md — $AGENTS_LINES lines (<= 55)" "[ $AGENTS_LINES -le 55 
 # --- [4] Subagent files exist and have correct frontmatter ---
 echo ""
 echo "[4] Subagent Configuration Checks"
-for agent in sdd-code-explorer sdd-spec-auditor; do
+for agent in sdd-code-explorer sdd-spec-auditor sdd-prompt-architect; do
   FILE="$ROOT/agents/$agent.md"
   check "agents/$agent.md — exists" "[ -f \"$FILE\" ]"
   check "agents/$agent.md — subagent: true" "grep -q 'subagent: true' \"$FILE\""
@@ -68,7 +68,7 @@ echo ""
 echo "[5] JSON Validity Checks"
 if command -v python3 >/dev/null 2>&1; then
   for jsonfile in plugin.json hooks.json; do
-    check "$jsonfile — valid JSON" "python3 -c \"import json,sys; json.load(open('$ROOT/$jsonfile'))\" 2>/dev/null"
+    check "$jsonfile — valid JSON" "python3 -c \"import json,sys; json.load(open('$jsonfile'))\" 2>/dev/null"
   done
 else
   echo "  ⚠️  SKIP: python3 not found. JSON validity not checked."
@@ -104,6 +104,7 @@ check "sdd-rule-create/resources/rule-template.md" "[ -f \"$ROOT/skills/sdd-rule
 check "sdd-agent-create/resources/agent-template.md" "[ -f \"$ROOT/skills/sdd-agent-create/resources/agent-template.md\" ]"
 check "sdd-hook-create/resources/hook-recipe-template.json" "[ -f \"$ROOT/skills/sdd-hook-create/resources/hook-recipe-template.json\" ]"
 check "sdd-mcp-create/resources/mcp-server-template.json" "[ -f \"$ROOT/skills/sdd-mcp-create/resources/mcp-server-template.json\" ]"
+check "sdd-prompt-craft/resources/prompt-guide.md" "[ -f \"$ROOT/skills/sdd-prompt-craft/resources/prompt-guide.md\" ]"
 
 # --- Summary ---
 echo ""

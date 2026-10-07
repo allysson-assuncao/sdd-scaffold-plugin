@@ -25,14 +25,14 @@
 - [x] Local commit: `feat(hooks): scope sdd-prompt-architect writes` (or record limitation)
 
 ## Phase 4 — Registration & Validation
-- [ ] Update `validate-v3.sh` to include `sdd-prompt-craft`, `sdd-prompt-architect`, and resource checks
-- [ ] Update `plugin.json` description
-- [ ] Verification: run `validate-v3.sh` and ensure 100% pass rate
-- [ ] Local commit: `chore: register sdd-prompt-craft and sdd-prompt-architect`
-- [ ] Final cumulative walkthrough update and user verification readiness
+- [x] Update `validate-v3.sh` to include `sdd-prompt-craft`, `sdd-prompt-architect`, and resource checks
+- [x] Update `plugin.json` description
+- [x] Verification: run `validate-v3.sh` and ensure 100% pass rate
+- [x] Local commit: `chore: register sdd-prompt-craft and sdd-prompt-architect`
+- [x] Final cumulative walkthrough update and user verification readiness
 
 ## Review Gate
-- [ ] All implementation tasks complete
-- [ ] All tests passing (`validate-v3.sh`)
-- [ ] Proposal acceptance criteria verified
-- [ ] Ready for `sdd-spec-archive`
+- [x] All implementation tasks complete
+- [x] All tests passing (`validate-v3.sh`)
+- [x] Proposal acceptance criteria verified
+- [x] Ready for `sdd-spec-archive`
