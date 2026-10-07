@@ -15,9 +15,9 @@
 - [x] Local commit: `feat(skill): add sdd-prompt-craft`
 
 ## Phase 2 — Subagent `sdd-prompt-architect`
-- [ ] Create `agents/sdd-prompt-architect.md` (flash, no run_command, scoped tools)
-- [ ] Verification: compare frontmatter with `agents/sdd-code-explorer.md`
-- [ ] Local commit: `feat(agent): add sdd-prompt-architect`
+- [x] Create `agents/sdd-prompt-architect.md` (flash, no run_command, scoped tools)
+- [x] Verification: compare frontmatter with `agents/sdd-code-explorer.md`
+- [x] Local commit: `feat(agent): add sdd-prompt-architect`
 
 ## Phase 3 — Write-Scope Hardening (Hooks)
 - [ ] Evaluate and configure write-scope PreToolUse hook in `hooks.json`

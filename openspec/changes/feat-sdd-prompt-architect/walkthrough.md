@@ -41,3 +41,20 @@ Registro cumulativo da execução do plano de implementação da feature `feat-s
 ### Handoff para a Fase 2
 - A Fase 2 criará a definição do subagente `agents/sdd-prompt-architect.md` com modelo `flash`, sandbox policy e sem `run_command`.
 
+---
+
+## Fase 2 — Subagente `sdd-prompt-architect`
+
+### Arquivos Criados / Modificados
+- `agents/sdd-prompt-architect.md` — Definição do subagente leve com modelo `flash`, sandbox policy, ferramentas de leitura + escrita scoped (`write_to_file`) + delegação (`invoke_subagent`), sem `run_command`. Instruções completas para inspeção de repositório, seleção de template da Seção 4, preenchimento declarativo, acúmulo de walkthrough e resposta com link clicável.
+- `openspec/changes/feat-sdd-prompt-architect/tasks.md` — Atualizado com as tarefas da Fase 2 marcadas como completas.
+
+### Resultados de Verificação
+- Chaves do frontmatter comparadas e validadas contra `agents/sdd-code-explorer.md`.
+- `run_command` estritamente ausente da lista de ferramentas.
+- `subagent: true`, `mainAgent: false`, `model: flash`, `commandExecutionPolicy: sandbox`.
+
+### Handoff para a Fase 3
+- A Fase 3 abordará o endurecimento do escopo de escrita (`write-scope hardening`) avaliando `hooks.json`.
+
+
