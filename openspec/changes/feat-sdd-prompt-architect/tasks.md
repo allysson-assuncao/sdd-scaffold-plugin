@@ -9,10 +9,10 @@
 ---
 
 ## Phase 1 — Skill `sdd-prompt-craft`
-- [ ] Copy `Universal Prompt Guide & Templates.md` to `skills/sdd-prompt-craft/resources/prompt-guide.md` and append Section 4
-- [ ] Create `skills/sdd-prompt-craft/SKILL.md` (< 500 lines, correct frontmatter)
-- [ ] Verification: check line counts and template contents
-- [ ] Local commit: `feat(skill): add sdd-prompt-craft`
+- [x] Copy `Universal Prompt Guide & Templates.md` to `skills/sdd-prompt-craft/resources/prompt-guide.md` and append Section 4
+- [x] Create `skills/sdd-prompt-craft/SKILL.md` (< 500 lines, correct frontmatter)
+- [x] Verification: check line counts and template contents
+- [x] Local commit: `feat(skill): add sdd-prompt-craft`
 
 ## Phase 2 — Subagent `sdd-prompt-architect`
 - [ ] Create `agents/sdd-prompt-architect.md` (flash, no run_command, scoped tools)

@@ -23,3 +23,21 @@ Registro cumulativo da execução do plano de implementação da feature `feat-s
 
 ### Handoff para a Fase 1
 - Aprovada a Fase 0, a Fase 1 criará a skill `sdd-prompt-craft` e a cópia do guia em `skills/sdd-prompt-craft/resources/prompt-guide.md` com a Seção 4.
+
+---
+
+## Fase 1 — Skill `sdd-prompt-craft`
+
+### Arquivos Criados / Modificados
+- `skills/sdd-prompt-craft/resources/prompt-guide.md` — Guia de prompts copiado de `Universal Prompt Guide & Templates.md`, caminho do artefato do Template 3 atualizado para `openspec/changes/<change-id>/walkthrough.md`, e Seção 4 (Template Selection & File Naming) adicionada ao final.
+- `skills/sdd-prompt-craft/SKILL.md` — Nova skill com frontmatter válido (`name`, `description`), contendo propósito, passos de coleta de intenção, delegação ao subagente `sdd-prompt-architect`, relato de link clicável e regras.
+- `openspec/changes/feat-sdd-prompt-architect/tasks.md` — Atualizado com as tarefas da Fase 1 marcadas como completas.
+
+### Resultados de Verificação
+- `skills/sdd-prompt-craft/SKILL.md`: 28 linhas (< 500 linhas de limite).
+- Frontmatter verificado com `name: sdd-prompt-craft` e `description`.
+- `prompt-guide.md`: contém os 4 templates originais e a Seção 4 adicionada.
+
+### Handoff para a Fase 2
+- A Fase 2 criará a definição do subagente `agents/sdd-prompt-architect.md` com modelo `flash`, sandbox policy e sem `run_command`.
+
