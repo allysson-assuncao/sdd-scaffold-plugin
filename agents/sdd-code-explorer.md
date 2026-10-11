@@ -36,7 +36,9 @@ List every file path that is directly or likely affected by the described change
 List methods, classes, interfaces, or route handlers that are touched by the change. Include the file path and approximate line number if found.
 
 ### Suggested Spec Stubs
-For each impacted file, suggest a `specs/<filename>-delta.md` stub filename to be created under the active change directory.
+Suggest which canonical specifications in `openspec/specs/` are affected and recommend corresponding spec stubs to be created under `openspec/changes/<change-id>/specs/`:
+- For existing canonical specs: suggest `specs/<target>-delta.md` targeting `openspec/specs/<target>.md`.
+- For new subsystems/domains: suggest a new canonical spec stub `specs/<new-domain>.md` (without `-delta` suffix).
 
 ## Constraints
 - You MUST operate in read-only mode at all times.

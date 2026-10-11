@@ -20,27 +20,18 @@ Before performing any structural code change (adding, renaming, or deleting file
 - For broader cross-cutting research (architecture questions, documentation surveys), use the native `research` subagent.
 - Wait for the subagent report before proceeding with proposal or task list creation.
 
-## Namespace Separation
-- `.agents/` — Agent configuration only: rules, subagents, skills, MCP configs, hooks.
-- `openspec/` — Business specifications only: proposals, tasks, specs, archive.
-- Never mix agent config files into `openspec/`, and never store business specs inside `.agents/`.
+## Namespace Separation & Canonical Invariants
+- `.agents/` — Agent config only: rules, subagents, skills, MCP configs, hooks. Never store business specs here.
+- `openspec/specs/` — Consolidated canonical living specs ONLY. Files ending in `-delta.md` are FORBIDDEN.
+- `openspec/changes/` — Active change proposals and scoped deltas. Archived to `openspec/archive/`.
 
-## Progressive Disclosure
-- Never inline the full content of a skill into your response. Activate skills on demand.
-- When referencing a spec or task file, read it; do not guess its contents.
-
-## Version Control
-- ALL files created inside `.agents/` and `openspec/` MUST be committed to Git.
-- Never write runtime caches, indexes, or ephemeral outputs into these directories.
-
-## Archival Gate
-- A change may only be archived via `sdd-spec-archive` after ALL tasks in `tasks.md` are marked `[x]`.
-- Incomplete tasks block archival unconditionally.
+## Progressive Disclosure & Archival Gate
+- Never inline full skills in chat. Read specs/tasks directly. Commit all `.agents/` and `openspec/` files to Git.
+- Archival via `sdd-spec-archive` requires ALL tasks in `tasks.md` to be `[x]` and consolidates specs into canonical living format.
 
 ## Anti-Patterns (DO NOT)
-- DO NOT place business specs (proposal.md, tasks.md) inside `.agents/`.
-- DO NOT place agent configs (SKILL.md, AGENTS.md, agent definitions) inside `openspec/`.
-- DO NOT inline the full body of a skill or spec file into a chat response.
+- DO NOT place business specs in `.agents/` or agent configs in `openspec/`.
+- DO NOT copy or write `*-delta.md` files into `openspec/specs/` (merge them into canonical specs).
 - DO NOT modify `openspec/specs/` directly — always go through `openspec/changes/`.
 - DO NOT commit runtime caches or engine indexes (e.g., `.antigravity/`) to Git.
 - DO NOT write or modify any file before an approved proposal exists for the change.

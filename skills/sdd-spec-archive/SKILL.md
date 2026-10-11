@@ -1,17 +1,16 @@
 ---
 name: sdd-spec-archive
 description: >-
-  Use this skill to validate, merge, and archive a completed SDD change. Reads
-  tasks.md to verify all tasks are done, merges delta specs from openspec/changes/
-  into openspec/specs/, then moves the change to openspec/archive/. Activate when
-  the user asks to 'archive a spec', 'close a change', 'merge and archive <change-id>',
-  or 'mark this change as done'.
+  Use this skill to validate, consolidate, and archive a completed SDD change. Reads
+  tasks.md to verify all tasks are done, consolidates specifications into openspec/specs/,
+  then moves the change to openspec/archive/. Activate when the user asks to 'archive a spec',
+  'close a change', 'merge and archive <change-id>', or 'mark this change as done'.
 ---
 
-# sdd-spec-archive — Validate, Merge & Archive a Change
+# sdd-spec-archive — Validate, Consolidate & Archive a Change
 
 ## Purpose
-Close out a completed change by verifying its task checklist, merging its delta specs into the canonical spec directory, and archiving the change folder with a timestamp.
+Close out a completed change by verifying its task checklist, consolidating its specifications into canonical living specs, and archiving the change folder with a timestamp.
 
 ## Prerequisites
 - `openspec/changes/<change-id>/` must exist.
@@ -44,18 +43,41 @@ Parse every line that matches the pattern `- [ ]` (unchecked task) or `- [x]` (c
 
 **Only if ALL tasks are `[x]`:** proceed to Step 3.
 
-## Step 3 — Merge Delta Specs
+## Step 3 — Consolidate Living Specifications
 
 Read all files inside `openspec/changes/<change-id>/specs/`.
 
-For each file in `specs/`:
-1. Determine the destination path: `openspec/specs/<filename>`.
-2. Check if the destination file already exists in `openspec/specs/`.
-   - If it **does NOT exist**: write the file to `openspec/specs/<filename>`.
-   - If it **exists**: warn the user: "File `openspec/specs/<filename>` already exists and will be overwritten. Confirm? (yes/no)". Only overwrite after explicit user confirmation.
-3. Write the file to `openspec/specs/<filename>`.
+If `openspec/changes/<change-id>/specs/` is empty or has no spec files, proceed directly to Step 4.
 
-If `openspec/changes/<change-id>/specs/` is empty, skip this step (no files to merge).
+For each file in `openspec/changes/<change-id>/specs/`:
+
+### Case A: New Subsystem Specification (file does NOT end with `-delta.md`)
+1. Destination path: `openspec/specs/<filename>` (must NOT contain `-delta`).
+2. Verify that the file conforms to the canonical living spec standard (`spec-template.md`).
+3. If `openspec/specs/<filename>` already exists:
+   - Warn the user: "Canonical specification `openspec/specs/<filename>` already exists. Confirm overwrite/replacement? (yes/no)". Only proceed after explicit user confirmation.
+4. Write the file to `openspec/specs/<filename>`.
+
+### Case B: Delta Specification (file ends with `-delta.md`)
+Delta specifications describe incremental modifications to existing canonical specifications. Under NO circumstance may a file ending in `-delta.md` be written or copied directly into `openspec/specs/`.
+
+1. Identify the target canonical specification:
+   - Check the frontmatter or header of the delta spec for target identifier (e.g., `Target Canonical Spec: <target-spec>.md`). If not specified, map from `<name>-delta.md` to `openspec/specs/<name>.md`.
+2. Check if the target canonical specification `openspec/specs/<target-spec>.md` exists:
+   - If it does NOT exist: convert the delta spec into a new canonical living spec conforming to `spec-template.md` and write it as `openspec/specs/<target-spec>.md` (without `-delta`).
+   - If it exists:
+     a. Read both `openspec/specs/<target-spec>.md` and the delta file `openspec/changes/<change-id>/specs/<filename>-delta.md`.
+     b. Semantically merge the changes:
+        - Integrate updated requirements (RF/RNF), domain entities, contracts, or sections.
+        - Strip change-scoped phrasing (e.g., "In this phase we added..."). The canonical document must read as the living present-tense source of truth.
+        - Increment the version in the frontmatter (`version: X.Y.Z`).
+        - Append a revision entry to Revision History noting change ID `<change-id>`.
+     c. Write the updated, consolidated content to `openspec/specs/<target-spec>.md`.
+
+### Safety Verification Guard (MANDATORY)
+Before proceeding to Step 4, scan `openspec/specs/`:
+- Confirm that NO file ending in `-delta.md` exists in `openspec/specs/`.
+- If any `*-delta.md` file is found in `openspec/specs/`, STOP immediately, remove it, and alert the user.
 
 ## Step 4 — Archive the Change Directory
 
@@ -65,7 +87,7 @@ Construct the archive path: `openspec/archive/<timestamp>-<change-id>/`
 
 Move the entire directory `openspec/changes/<change-id>/` to `openspec/archive/<timestamp>-<change-id>/`.
 
-This includes `proposal.md`, `tasks.md`, and the `specs/` subdirectory (now emptied into `openspec/specs/`).
+This includes `proposal.md`, `tasks.md`, and the `specs/` subdirectory (preserving the original delta files for immutable historical auditing).
 
 ## Step 5 — Confirm
 
@@ -74,7 +96,7 @@ Output a confirmation summary:
 ```
 ✅ Change `<change-id>` archived successfully.
 
-Merged specs (N files):
+Consolidated living specs (N files):
   openspec/specs/<file1>
   openspec/specs/<file2>
   ...
@@ -88,4 +110,5 @@ The change is now closed. Its proposal and tasks are preserved in the archive.
 ## Notes
 - The archive is permanent within the `openspec/` namespace. The user can always find historical changes in `openspec/archive/`.
 - Do NOT delete the archive directory after creation.
-- Do NOT modify `openspec/specs/` files that were NOT part of this change's delta specs.
+- Canonical specs in `openspec/specs/` must never contain `-delta.md` files.
+- Do NOT modify `openspec/specs/` files that were NOT part of this change's specs.

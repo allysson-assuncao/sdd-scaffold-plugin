@@ -106,6 +106,12 @@ check "sdd-hook-create/resources/hook-recipe-template.json" "[ -f \"$ROOT/skills
 check "sdd-mcp-create/resources/mcp-server-template.json" "[ -f \"$ROOT/skills/sdd-mcp-create/resources/mcp-server-template.json\" ]"
 check "sdd-prompt-craft/resources/prompt-guide.md" "[ -f \"$ROOT/skills/sdd-prompt-craft/resources/prompt-guide.md\" ]"
 
+# --- [10] Canonical Living Specs Invariants ---
+echo ""
+echo "[10] Canonical Living Specs Invariants"
+check "openspec/specs/ — no *-delta.md files exist" "[ -d \"$ROOT/openspec/specs\" ] && [ \$(find \"$ROOT/openspec/specs\" -maxdepth 1 -name '*-delta.md' | wc -l) -eq 0 ]"
+check "openspec/specs/ — files do not contain '# Delta Spec:' header" "! grep -r '^# Delta Spec:' \"$ROOT/openspec/specs\" -q 2>/dev/null"
+
 # --- Summary ---
 echo ""
 echo "========================================"

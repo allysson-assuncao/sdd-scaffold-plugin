@@ -1,8 +1,14 @@
-# Delta Spec: `prompt-engineering-workflow.md`
+# Specification: Prompt Engineering Workflow
 
-> **Change ID:** `feat-sdd-prompt-architect`
-> **File:** `skills/sdd-prompt-craft/resources/prompt-guide.md` & `skills/sdd-prompt-craft/SKILL.md`
-> **Change Type:** Create
+> **Spec ID:** `spec-prompt-engineering-workflow`
+> **Title:** SDD Prompt Engineering Workflow & Template Architecture
+> **Version:** 1.0.0
+> **Status:** active
+> **Owners:** @sdd-team
+> **Scope:** Defines the prompt engineering workflow, template taxonomy, signal detection heuristics, and walkthrough accumulation conventions used across `sdd-prompt-craft` and `sdd-prompt-architect`.
+>
+> This is the authoritative source of truth for this module's current functional state.
+> Update this file only after merging a completed change from openspec/changes/.
 
 ---
 

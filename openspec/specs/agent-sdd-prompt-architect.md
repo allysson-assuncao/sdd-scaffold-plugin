@@ -1,8 +1,14 @@
-# Delta Spec: `agents/sdd-prompt-architect.md`
+# Specification: SDD Prompt Architect Agent
 
-> **Change ID:** `feat-sdd-prompt-architect`
-> **File:** `agents/sdd-prompt-architect.md`
-> **Change Type:** Create
+> **Spec ID:** `spec-agent-sdd-prompt-architect`
+> **Title:** SDD Prompt Architect Subagent
+> **Version:** 1.0.0
+> **Status:** active
+> **Owners:** @sdd-team
+> **Scope:** Defines configuration, frontmatter metadata, tooling constraints, and execution boundaries for the `sdd-prompt-architect` subagent.
+>
+> This is the authoritative source of truth for this module's current functional state.
+> Update this file only after merging a completed change from openspec/changes/.
 
 ---
 

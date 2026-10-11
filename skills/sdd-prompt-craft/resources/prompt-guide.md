@@ -67,7 +67,7 @@ Structure a formal change proposal following the project's Spec-Driven Developme
 3. Required proposal elements:
    - Problem & Scope
    - Impacted Areas (invoke `sdd-code-explorer` if needed)
-   - Delta Specs for `openspec/specs/`
+   - Delta Specs under `openspec/changes/[change-name]/specs/` targeting canonical specs
    - Atomic Task Breakdown (`tasks.md`)
 
 Do NOT modify production source code. Present proposal artifact for user review.

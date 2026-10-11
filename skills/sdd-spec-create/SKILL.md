@@ -112,17 +112,21 @@ Use `invoke_subagent` with:
 
 Wait for the subagent's structured report. When received:
 1. Populate the `### Impacted Files` table in `openspec/changes/<change-id>/proposal.md` with the files and reasons from the report.
-2. For each impacted file listed, create a stub file at `openspec/changes/<change-id>/specs/<filename>-delta.md` using the format:
-   ```markdown
-   # Delta Spec: `<filename>`
+2. Determine which architectural domain specifications are impacted by these code changes:
+   - **For modifications to existing canonical specifications in `openspec/specs/<target>.md`:**
+     Create a delta stub at `openspec/changes/<change-id>/specs/<target>-delta.md`:
+     ```markdown
+     # Delta Spec: `<target>`
 
-   > **Change ID:** `<change-id>`
-   > **File:** `<full/path/to/file>`
-   > **Change Type:** Modify | Create | Delete
+     > **Change ID:** `<change-id>`
+     > **Target Canonical Spec:** `openspec/specs/<target>.md`
+     > **Change Type:** Modify
 
-   ## Changes Description
-   <!-- Describe what changes in this file. Include new/modified function signatures, types, endpoints, etc. -->
-   ```
+     ## Architectural Updates
+     <!-- Describe functional requirements, contracts, or domain updates to merge into the canonical spec -->
+     ```
+   - **For new subsystems or architectural domains (not yet in `openspec/specs/`):**
+     Create a new canonical spec stub at `openspec/changes/<change-id>/specs/<new-domain>.md` (without `-delta` suffix) conforming to `skills/sdd-init/resources/spec-template.md`.
 
 If `sdd-code-explorer` is unavailable, fall back to the native `research` subagent with the same prompt, and note in the proposal that the scan was performed by the research subagent.
 
@@ -136,7 +140,7 @@ Output a confirmation summary:
 Files created:
   openspec/changes/<change-id>/proposal.md
   openspec/changes/<change-id>/tasks.md
-  openspec/changes/<change-id>/specs/  (empty, ready for delta specs)
+  openspec/changes/<change-id>/specs/  (ready for delta or new specs)
 
 Next steps:
   1. Fill in the proposal: openspec/changes/<change-id>/proposal.md
