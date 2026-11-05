@@ -51,7 +51,7 @@ AGENTS_FILE="$ROOT/rules/AGENTS.md"
 AGENTS_LINES=$(wc -l < "$AGENTS_FILE")
 check "rules/AGENTS.md — $AGENTS_LINES lines (<= 55)" "[ $AGENTS_LINES -le 55 ]"
 
-# --- [4] Subagent files exist and have correct frontmatter ---
+# --- [4] Subagent files exist and have correct frontmatter & tools ---
 echo ""
 echo "[4] Subagent Configuration Checks"
 for agent in sdd-code-explorer sdd-spec-auditor sdd-prompt-architect; do
@@ -61,18 +61,36 @@ for agent in sdd-code-explorer sdd-spec-auditor sdd-prompt-architect; do
   check "agents/$agent.md — mainAgent: false" "grep -q 'mainAgent: false' \"$FILE\""
   check "agents/$agent.md — model: flash" "grep -q 'model: flash' \"$FILE\""
   check "agents/$agent.md — commandExecutionPolicy: sandbox" "grep -q 'commandExecutionPolicy: sandbox' \"$FILE\""
+  check "agents/$agent.md — has read_file tool" "grep -q 'read_file' \"$FILE\""
+  check "agents/$agent.md — has list_dir tool" "grep -q 'list_dir' \"$FILE\""
+  check "agents/$agent.md — has send_message tool" "grep -q 'send_message' \"$FILE\""
 done
 
-# --- [5] JSON validity ---
+# --- [5] JSON validity & Hook Schema / Guard Functional Checks ---
 echo ""
-echo "[5] JSON Validity Checks"
-if command -v python3 >/dev/null 2>&1; then
-  for jsonfile in plugin.json hooks.json; do
-    check "$jsonfile — valid JSON" "python3 -c \"import json,sys; json.load(open('$jsonfile'))\" 2>/dev/null"
-  done
-else
-  echo "  ⚠️  SKIP: python3 not found. JSON validity not checked."
-fi
+echo "[5] JSON Validity & Hook Guard Checks"
+for jsonfile in plugin.json hooks.json skills/sdd-hook-create/resources/hook-recipe-template.json; do
+  check "$jsonfile — valid JSON" "node -e \"JSON.parse(require('fs').readFileSync('$jsonfile', 'utf8'))\" 2>/dev/null"
+done
+
+check "hooks.json — conforms to map[string]JSONHookSpec (no top-level string keys)" \
+  "node -e \"const h = JSON.parse(require('fs').readFileSync('hooks.json', 'utf8')); if (Object.values(h).some(v => typeof v !== 'object' || v === null || Array.isArray(v))) process.exit(1);\""
+
+for script in sdd-readonly-guard.mjs check-approved-proposal.mjs scope-prompt-writes.mjs run-linter.mjs; do
+  check "scripts/$script — exists" "[ -f \"$ROOT/scripts/$script\" ]"
+done
+
+check "sdd-readonly-guard.mjs — auto-allows view_file on workspace file" \
+  "echo '{\"toolCall\":{\"name\":\"view_file\",\"args\":{\"Path\":\"README.md\"}}}' | node scripts/sdd-readonly-guard.mjs | grep -q '\"decision\":\"allow\"'"
+
+check "sdd-readonly-guard.mjs — blocks auto-allow on .env sensitive file" \
+  "! (echo '{\"toolCall\":{\"name\":\"read_file\",\"args\":{\"Path\":\"/app/.env\"}}}' | node scripts/sdd-readonly-guard.mjs | grep -q '\"decision\":\"allow\"')"
+
+check "sdd-readonly-guard.mjs — auto-allows safe git status run_command" \
+  "echo '{\"toolCall\":{\"name\":\"run_command\",\"args\":{\"CommandLine\":\"git status\"}}}' | node scripts/sdd-readonly-guard.mjs | grep -q '\"decision\":\"allow\"'"
+
+check "sdd-readonly-guard.mjs — rejects chained mutating run_command" \
+  "! (echo '{\"toolCall\":{\"name\":\"run_command\",\"args\":{\"CommandLine\":\"git status && rm -rf build\"}}}' | node scripts/sdd-readonly-guard.mjs | grep -q '\"decision\":\"allow\"')"
 
 # --- [6] Hard Stop rules present in AGENTS.md ---
 echo ""

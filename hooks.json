@@ -1,23 +1,62 @@
 {
-  "$schema": "https://antigravity.google/schemas/v1/hooks.json",
-  "_comment": "SDD Scaffold Plugin — Lifecycle Hook Recipes. These are RECIPE STUBS. Uncomment and configure the hooks you need. Each hook entry requires a 'matcher' (tool name or glob) and a 'command' (shell script path relative to workspace root). All commands must exit 0 to allow the tool call to proceed.",
-  "PreToolUse": [
-    {
-      "_comment_disabled": "RECIPE: Block write tools when no approved proposal exists. Requires a script at .agents/hooks/check-approved-proposal.sh that exits 1 if openspec/changes/ has no proposal with Status: approved.",
-      "_disabled_matcher": "write_to_file|replace_file_content|run_command",
-      "_disabled_command": ".agents/hooks/check-approved-proposal.sh"
-    },
-    {
-      "_comment_disabled": "RECIPE: Scope sdd-prompt-architect writes to prompt-*.md in project root. Requires caller context check in .agents/hooks/scope-prompt-writes.sh; disabled globally to avoid blocking valid writes from other agents.",
-      "_disabled_matcher": "write_to_file",
-      "_disabled_command": ".agents/hooks/scope-prompt-writes.sh"
-    }
-  ],
-  "PostToolUse": [
-    {
-      "_comment_disabled": "RECIPE: Run linter after file writes. Requires a script at .agents/hooks/run-linter.sh configured per sdd-stack-contract.md linter command.",
-      "_disabled_matcher": "write_to_file|replace_file_content",
-      "_disabled_command": ".agents/hooks/run-linter.sh"
-    }
-  ]
+  "sdd-readonly-auto-allow": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "view_file|read_file|grep_search|find_by_name|list_dir",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/sdd-readonly-guard.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "sdd-enforce-proposal": {
+    "enabled": false,
+    "PreToolUse": [
+      {
+        "matcher": "write_to_file|write_file|replace_file_content|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-approved-proposal.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "sdd-scope-prompt-writes": {
+    "enabled": false,
+    "PreToolUse": [
+      {
+        "matcher": "write_to_file|write_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/scope-prompt-writes.mjs",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "sdd-run-linter": {
+    "enabled": false,
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|write_file|replace_file_content|edit_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/run-linter.mjs",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
 }
