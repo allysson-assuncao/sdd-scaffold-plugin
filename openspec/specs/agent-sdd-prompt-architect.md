@@ -2,7 +2,7 @@
 
 > **Spec ID:** `spec-agent-sdd-prompt-architect`
 > **Title:** SDD Prompt Architect Subagent
-> **Version:** 1.1.0
+> **Version:** 1.2.0
 > **Status:** active
 > **Owners:** @sdd-team
 > **Scope:** Defines configuration, frontmatter metadata, tooling constraints, and execution boundaries for the `sdd-prompt-architect` subagent.
@@ -26,12 +26,10 @@ description: >-
   templates and writes prompt-*.md in the project root. Never dispatches executors.
   Invoke via the sdd-prompt-craft skill.
 tools:
-  - view_file
   - read_file
   - grep_search
   - find_by_name
   - list_dir
-  - write_to_file
   - write_file
   - invoke_subagent
   - send_message
@@ -44,7 +42,7 @@ commandExecutionPolicy: sandbox
 ## 3. Operational Requirements
 
 - **Model Tier:** Bounded strictly to `flash` for low token consumption and fast response times.
-- **Tooling Restrictions:** Read tools (`view_file`, `read_file`, `grep_search`, `find_by_name`, `list_dir`), scoped write tools (`write_to_file`, `write_file`), and subagent coordination tools (`invoke_subagent`, `send_message`). Prohibited tool: `run_command` is strictly excluded.
+- **Tooling Restrictions:** Read tools (`read_file`, `grep_search`, `find_by_name`, `list_dir`), scoped write tools (`write_file`), and subagent coordination tools (`invoke_subagent`, `send_message`). Legacy aliases (`view_file`, `write_to_file`) are strictly omitted to prevent duplicate tool resolution conflicts in the Antigravity runtime. Prohibited tool: `run_command` is strictly excluded.
 - **Execution Sandbox:** Execution policy is set to `sandbox`.
 - **Target Path Enforcement:** Allowed write target is exclusively `prompt-*.md` or `prompt.md` in the project root. Any path containing subdirectories or deviating from this pattern must be rejected.
 - **Subagent Delegation:** Only read-only mapping subagents (such as `sdd-code-explorer`) may be invoked. The subagent must never invoke execution agents or dispatch the generated prompt.
@@ -72,3 +70,4 @@ commandExecutionPolicy: sandbox
 |---------|------|--------|---------|
 | 1.0.0 | 2026-10-07 | @sdd-team | Initial specification (`feat-sdd-prompt-architect`) |
 | 1.1.0 | 2026-11-05 | @allysson-assuncao | Add `read_file`, `list_dir`, `write_file`, and `send_message` to `tools:` allowlist (`feat-hooks-and-readonly-permissions`) |
+| 1.2.0 | 2026-11-08 | @antigravity | Remove redundant aliases `view_file` and `write_to_file` to fix executor tool conflict (`fix-subagent-tool-conflicts-and-resource-paths`) |

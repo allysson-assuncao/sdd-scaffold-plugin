@@ -76,7 +76,7 @@ Do NOT proceed until the user confirms with "yes".
 
 ## Step 4 — Update hooks.json
 
-Read `resources/hook-recipe-template.json` for the official `map[string]JSONHookSpec` format.
+Read [hook-recipe-template.json](./resources/hook-recipe-template.json) (in `resources/` adjacent to this `SKILL.md`) for the official `map[string]JSONHookSpec` format.
 
 > [!CAUTION]
 > NEVER add `"$schema"` or `"_comment"` keys at the root of `hooks.json`. The Antigravity Go loader unmarshals every top-level key directly into `jsonhook.JSONHookSpec` and will skip the entire file if any top-level value is a string. Use `"enabled": false` inside a named hook object to disable a hook.

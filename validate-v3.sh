@@ -64,6 +64,8 @@ for agent in sdd-code-explorer sdd-spec-auditor sdd-prompt-architect; do
   check "agents/$agent.md — has read_file tool" "grep -q 'read_file' \"$FILE\""
   check "agents/$agent.md — has list_dir tool" "grep -q 'list_dir' \"$FILE\""
   check "agents/$agent.md — has send_message tool" "grep -q 'send_message' \"$FILE\""
+  check "agents/$agent.md — no conflicting view_file alias" "! grep -q 'view_file' \"$FILE\""
+  check "agents/$agent.md — no conflicting write_to_file alias" "! grep -q 'write_to_file' \"$FILE\""
 done
 
 # --- [5] JSON validity & Hook Schema / Guard Functional Checks ---

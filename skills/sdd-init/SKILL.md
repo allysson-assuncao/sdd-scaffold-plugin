@@ -85,12 +85,16 @@ Create the following directories:
 
 Copy the following template files from this skill's `resources/` directory into the workspace. Read each resource file and write its contents to the destination path:
 
-| Source (relative to this SKILL.md) | Destination (relative to workspace root) |
+> [!IMPORTANT]
+> Template files are located in the `resources/` directory adjacent to this `SKILL.md` (e.g., `~/.gemini/config/skills/sdd-init/resources/` or `<skill-directory>/resources/`).
+> Always resolve the template path relative to this `SKILL.md` file (or click the links below). Do NOT attempt to read `resources/` relative to the target workspace root.
+
+| Source (link relative to this SKILL.md) | Destination (relative to workspace root) |
 |---|---|
-| `resources/sdd-stack-contract.md` | `openspec/specs/sdd-stack-contract.md` |
-| `resources/spec-template.md` | `openspec/specs/_template.md` |
-| `resources/openspec-proposal.md` | `openspec/changes/_example/proposal.md` |
-| `resources/openspec-tasks.md` | `openspec/changes/_example/tasks.md` |
+| [sdd-stack-contract.md](./resources/sdd-stack-contract.md) | `openspec/specs/sdd-stack-contract.md` |
+| [spec-template.md](./resources/spec-template.md) | `openspec/specs/_template.md` |
+| [openspec-proposal.md](./resources/openspec-proposal.md) | `openspec/changes/_example/proposal.md` |
+| [openspec-tasks.md](./resources/openspec-tasks.md) | `openspec/changes/_example/tasks.md` |
 
 ## Step 6 — Confirm
 

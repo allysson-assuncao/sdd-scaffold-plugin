@@ -59,7 +59,7 @@ Do NOT proceed until the user confirms with "yes".
 
 ## Step 4 — Create or Append the Rule
 
-Read `resources/rule-template.md` and substitute:
+Read [rule-template.md](./resources/rule-template.md) (in `resources/` adjacent to this `SKILL.md`) and substitute:
 - `{{RULE_TITLE}}` → a concise title for the rule section (derived from the user's description)
 - `{{RULE_CONTENT}}` → the rule directives drafted from the user's description
 

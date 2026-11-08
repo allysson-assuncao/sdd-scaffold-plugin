@@ -6,12 +6,10 @@ description: >-
   templates and writes prompt-*.md in the project root. Never dispatches executors.
   Invoke via the sdd-prompt-craft skill.
 tools:
-  - view_file
   - read_file
   - grep_search
   - find_by_name
   - list_dir
-  - write_to_file
   - write_file
   - invoke_subagent
   - send_message
