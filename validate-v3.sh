@@ -1,5 +1,5 @@
 #!/bin/sh
-# validate-v3.sh — sdd-scaffold-plugin v3 Acceptance Validation Suite
+# validate-v3.sh — agentic-dev-workflow Acceptance Validation Suite
 # Run from the plugin root directory.
 
 PASS=0
@@ -20,11 +20,18 @@ check() {
 
 echo ""
 echo "========================================"
-echo " SDD Scaffold Plugin v3 — Validation"
+echo " agentic-dev-workflow v4 — Validation"
 echo "========================================"
 echo ""
 
-# --- [1] YAML Frontmatter: All new SKILL.md files ---
+# --- [0] Plugin Identity & Root Documentation ---
+echo "[0] Plugin Identity & Root Documentation Checks"
+check "plugin.json — name is agentic-dev-workflow" "grep -q '\"name\": \"agentic-dev-workflow\"' \"$ROOT/plugin.json\""
+check "plugin.json — version is 4.0.0" "grep -q '\"version\": \"4.0.0\"' \"$ROOT/plugin.json\""
+check "README.md — exists at repository root" "[ -f \"$ROOT/README.md\" ]"
+
+# --- [1] YAML Frontmatter: All SKILL.md files ---
+echo ""
 echo "[1] YAML Frontmatter Checks"
 for skill in sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft; do
   FILE="$ROOT/skills/$skill/SKILL.md"
@@ -94,12 +101,19 @@ check "sdd-readonly-guard.mjs — auto-allows safe git status run_command" \
 check "sdd-readonly-guard.mjs — rejects chained mutating run_command" \
   "! (echo '{\"toolCall\":{\"name\":\"run_command\",\"args\":{\"CommandLine\":\"git status && rm -rf build\"}}}' | node scripts/sdd-readonly-guard.mjs | grep -q '\"decision\":\"allow\"')"
 
-# --- [6] Hard Stop rules present in AGENTS.md ---
+check "check-approved-proposal.mjs — passes through ({}) in non-SDD workspace without openspec/" \
+  "[ \"\$(echo '{\"workspacePaths\":[\"/tmp/non-sdd-workspace-absent-dir\"],\"toolCall\":{\"name\":\"write_file\",\"args\":{\"Path\":\"src/index.ts\"}}}' | node scripts/check-approved-proposal.mjs)\" = \"{}\" ]"
+
+check "check-approved-proposal.mjs — denies write in SDD workspace without approved proposal" \
+  "node -e \"const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'sdd-test-'));fs.mkdirSync(path.join(tmp,'openspec','changes'),{recursive:true});const out=cp.execFileSync('node',['scripts/check-approved-proposal.mjs'],{input:JSON.stringify({workspacePaths:[tmp],toolCall:{name:'write_file',args:{Path:'src/index.ts'}}}),encoding:'utf8'});fs.rmSync(tmp,{recursive:true,force:true});if(!out.includes('\\\"decision\\\":\\\"deny\\\"'))process.exit(1);\""
+
+# --- [6] Hard Stop & Dual-Mode rules present in AGENTS.md ---
 echo ""
-echo "[6] Hard Stop Rule Content Checks"
+echo "[6] Hard Stop & Dual-Mode Rule Content Checks"
 check "AGENTS.md — Hard Stop write_to_file prohibition" "grep -q 'write_to_file' \"$ROOT/rules/AGENTS.md\""
 check "AGENTS.md — Mandatory sdd-code-explorer delegation" "grep -q 'sdd-code-explorer' \"$ROOT/rules/AGENTS.md\""
 check "AGENTS.md — DO NOT scan codebase" "grep -q 'context bloat' \"$ROOT/rules/AGENTS.md\""
+check "AGENTS.md — Dual-Mode Governance documented" "grep -q 'Dual-Mode' \"$ROOT/rules/AGENTS.md\""
 
 # --- [7] Proposal template security sections ---
 echo ""
@@ -138,9 +152,10 @@ echo "========================================"
 TOTAL=$((PASS + FAIL))
 echo " Results: $PASS/$TOTAL checks passed"
 if [ $FAIL -eq 0 ]; then
-  echo " 🎉 ALL CHECKS PASSED — v3 is valid."
+  echo " 🎉 ALL CHECKS PASSED — v4 is valid."
 else
   echo " ❌ $FAIL CHECKS FAILED — resolve failures before committing."
 fi
 echo "========================================"
 echo ""
+exit $FAIL

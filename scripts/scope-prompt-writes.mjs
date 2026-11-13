@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // scope-prompt-writes.mjs
-// Opt-in PreToolUse recipe hook for sdd-scaffold-plugin ("sdd-scope-prompt-writes").
+// Opt-in PreToolUse recipe hook for agentic-dev-workflow ("sdd-scope-prompt-writes").
 // When invoked during a prompt-generation turn, ensures write_to_file / write_file
 // only writes to prompt.md or prompt-*.md in the workspace root.
 
