@@ -33,7 +33,7 @@ check "README.md — exists at repository root" "[ -f \"$ROOT/README.md\" ]"
 # --- [1] YAML Frontmatter: All SKILL.md files ---
 echo ""
 echo "[1] YAML Frontmatter Checks"
-for skill in sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft; do
+for skill in sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft sdd-bug-triage tech-research discovery-align; do
   FILE="$ROOT/skills/$skill/SKILL.md"
   check "skills/$skill/SKILL.md — exists" "[ -f \"$FILE\" ]"
   check "skills/$skill/SKILL.md — has 'name:' frontmatter" "grep -q '^name:' \"$FILE\""
@@ -43,7 +43,7 @@ done
 # --- [2] SKILL.md line count < 500 ---
 echo ""
 echo "[2] SKILL.md Line Count Checks (< 500 lines each)"
-for skill in sdd-init sdd-spec-create sdd-spec-archive sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft; do
+for skill in sdd-init sdd-spec-create sdd-spec-archive sdd-spec-validate sdd-spec-status sdd-skill-create sdd-rule-create sdd-agent-create sdd-hook-create sdd-mcp-create sdd-prompt-craft sdd-bug-triage tech-research discovery-align; do
   FILE="$ROOT/skills/$skill/SKILL.md"
   if [ -f "$FILE" ]; then
     LINES=$(wc -l < "$FILE")
@@ -61,7 +61,7 @@ check "rules/AGENTS.md — $AGENTS_LINES lines (<= 55)" "[ $AGENTS_LINES -le 55 
 # --- [4] Subagent files exist and have correct frontmatter & tools ---
 echo ""
 echo "[4] Subagent Configuration Checks"
-for agent in sdd-code-explorer sdd-spec-auditor sdd-prompt-architect; do
+for agent in sdd-code-explorer sdd-spec-auditor sdd-prompt-architect tech-profiler; do
   FILE="$ROOT/agents/$agent.md"
   check "agents/$agent.md — exists" "[ -f \"$FILE\" ]"
   check "agents/$agent.md — subagent: true" "grep -q 'subagent: true' \"$FILE\""
@@ -139,6 +139,8 @@ check "sdd-agent-create/resources/agent-template.md" "[ -f \"$ROOT/skills/sdd-ag
 check "sdd-hook-create/resources/hook-recipe-template.json" "[ -f \"$ROOT/skills/sdd-hook-create/resources/hook-recipe-template.json\" ]"
 check "sdd-mcp-create/resources/mcp-server-template.json" "[ -f \"$ROOT/skills/sdd-mcp-create/resources/mcp-server-template.json\" ]"
 check "sdd-prompt-craft/resources/prompt-guide.md" "[ -f \"$ROOT/skills/sdd-prompt-craft/resources/prompt-guide.md\" ]"
+check "tech-research/resources/tech-decision-template.md" "[ -f \"$ROOT/skills/tech-research/resources/tech-decision-template.md\" ]"
+check "discovery-align/resources/discovery-report-template.md" "[ -f \"$ROOT/skills/discovery-align/resources/discovery-report-template.md\" ]"
 
 # --- [10] Canonical Living Specs Invariants ---
 echo ""
