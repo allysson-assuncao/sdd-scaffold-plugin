@@ -2,7 +2,7 @@
 
 > **Spec ID:** `spec-prompt-engineering-workflow`
 > **Title:** SDD Prompt Engineering Workflow & Template Architecture
-> **Version:** 1.0.0
+> **Version:** 1.1.0
 > **Status:** active
 > **Owners:** @sdd-team
 > **Scope:** Defines the prompt engineering workflow, template taxonomy, signal detection heuristics, and walkthrough accumulation conventions used across `sdd-prompt-craft` and `sdd-prompt-architect`.
@@ -14,13 +14,13 @@
 
 ## 1. Specification Overview
 
-Defines the prompt engineering workflow, template taxonomy, signal detection heuristics, and walkthrough accumulation conventions used across `sdd-prompt-craft` and `sdd-prompt-architect`.
+Defines the prompt engineering workflow, template taxonomy, signal detection heuristics, and walkthrough accumulation conventions used across `sdd-prompt-craft` and `sdd-prompt-architect`. `sdd-prompt-craft` is strictly scoped to generating standalone `prompt-*.md` files in the project root for external or subsequent execution models; when the user requests live interactive investigation, stack selection, or `/grill-me` alignment directly within the current conversation, progressive disclosure routes to `discovery-align` or `tech-research`.
 
 ## 2. Template Taxonomy & Detection Heuristics
 
 | Signal | Template | Output File Pattern | Purpose |
 |--------|----------|---------------------|---------|
-| Ambiguous / exploratory request | Template 1 (Discovery & Alignment) | `prompt-discovery.md` | Interactive interview (`/grill-me`) & discovery stubs |
+| Ambiguous / exploratory request (offline prompt file requested) | Template 1 (Discovery & Alignment) | `prompt-discovery.md` | Standalone prompt for interactive interview (`/grill-me`) & discovery stubs in an executor session |
 | New feature, no active change in `openspec/changes/` | Template 2 (SDD Spec Planning) | `prompt-<change-id>-spec.md` | Formal change proposal & tasks checklist |
 | Approved change with active `tasks.md` | Template 3 (Phased Atomic Execution) | `prompt-<change-id>-phase-<N>.md` | Execution of single phase with local commit & walkthrough logging |
 | Isolated bug / surgical fix | Template 4 (Direct Fix) | `prompt-fix-<target>.md` | Lean and targeted bug resolution |
@@ -41,8 +41,8 @@ For Template 3 prompts:
 
 ## 4. Acceptance Criteria (Given-When-Then)
 
-- **Scenario 1: Ambiguous exploration trigger**
-  - **Given** an exploratory or ill-defined requirement from the user,
+- **Scenario 1: Ambiguous exploration trigger (offline prompt file)**
+  - **Given** an exploratory or ill-defined requirement where the user explicitly asks to generate a prompt file,
   - **When** `sdd-prompt-craft` is invoked,
   - **Then** `prompt-discovery.md` using Template 1 is generated in the project root and a clickable link is returned in chat without launching an executor.
 
@@ -55,3 +55,10 @@ For Template 3 prompts:
   - **Given** any generated prompt file,
   - **When** inspected on disk,
   - **Then** prompt body text is in English, while all user interactions, chat responses, and walkthrough notes are in Portuguese (`pt-BR`).
+
+## 5. Revision History
+
+| Version | Date | Author | Summary |
+|---------|------|--------|---------|
+| 1.0.0 | 2026-10-07 | @sdd-team | Initial canonical specification (`feat-sdd-prompt-architect`) |
+| 1.1.0 | 2026-11-13 | @allysson-assuncao | Disambiguate offline `sdd-prompt-craft` generation from live interactive `discovery-align` and `tech-research` (`feat-tech-research-and-discovery`) |

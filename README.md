@@ -22,7 +22,13 @@ The global rule in [`rules/AGENTS.md`](./rules/AGENTS.md) automatically adapts t
 
 ## Bundled Customizations
 
-### 1. SDD Lifecycle Skills (`skills/sdd-*`)
+### 1. Interactive Discovery & Technology Research Skills (SDD & Non-SDD)
+| Skill | Description |
+|-------|-------------|
+| `tech-research` | Profiles local stack constraints via `tech-profiler`, researches market standards and reference architectures via `search_web`, presents 2–4 candidate options, aligns via `/grill-me`, and updates `sdd-stack-contract.md` or writes `tech-decision-<topic>.md` on demand. |
+| `discovery-align` | Investigates workspace context via `sdd-code-explorer` / `research`, proposes 2–3 initial solution approaches with trade-offs in chat, aligns open decisions via `/grill-me`, and hands off to `sdd-spec-create` or writes `discovery-<topic>.md` on demand. |
+
+### 2. SDD Lifecycle Skills (`skills/sdd-*`)
 | Skill | Description |
 |-------|-------------|
 | `sdd-init` | Initializes `.agents/` and `openspec/` (`specs/`, `changes/`, `archive/`, `sdd-stack-contract.md`). |
@@ -32,13 +38,13 @@ The global rule in [`rules/AGENTS.md`](./rules/AGENTS.md) automatically adapts t
 | `sdd-spec-status` | Renders a live progress dashboard of active changes in `openspec/changes/`. |
 | `sdd-spec-archive` | Enforces 100% `[x]` task completion, merges delta specs into `openspec/specs/`, and archives the change. |
 
-### 2. Prompt Engineering Workflow
+### 3. Prompt Engineering Workflow
 | Skill / Subagent | Description |
 |------------------|-------------|
-| `sdd-prompt-craft` | Gathers user intent and delegates to `sdd-prompt-architect` to generate token-efficient `prompt-*.md` files in the project root. |
+| `sdd-prompt-craft` | Gathers user intent and delegates to `sdd-prompt-architect` to generate standalone, token-efficient `prompt-*.md` files in the project root for external/subsequent execution models. |
 | `sdd-prompt-architect` | Sandboxed `flash` subagent selecting among 4 templates (Discovery `/grill-me`, SDD Spec, Phased Execution with `walkthrough.md`, Direct Fix). |
 
-### 3. Modular `.agents/` Creators
+### 4. Modular `.agents/` Creators
 | Skill | Description |
 |-------|-------------|
 | `sdd-skill-create` | Scaffolds a new Antigravity 2.0 Skill (`SKILL.md` + optional subdirectories). |
@@ -47,12 +53,13 @@ The global rule in [`rules/AGENTS.md`](./rules/AGENTS.md) automatically adapts t
 | `sdd-hook-create` | Configures lifecycle hooks in `hooks.json` (`map[string]JSONHookSpec`) with portable `.mjs` scripts. |
 | `sdd-mcp-create` | Scaffolds `stdio` or `SSE` MCP server entries in `mcp_config.json` with environment variable secret injection. |
 
-### 4. Subagents (`agents/`)
-- **`sdd-code-explorer`** (`flash`, `sandbox`, read-only): Scans repository files, symbols, and routes to map change impact.
+### 5. Subagents (`agents/`)
+- **`tech-profiler`** (`flash`, `sandbox`, read-only): Profiles project manifests (`package.json`, `pom.xml`, `pyproject.toml`, Dockerfiles, `sdd-stack-contract.md`) and architectural constraints for `tech-research`.
+- **`sdd-code-explorer`** (`flash`, `sandbox`, read-only): Scans repository files, symbols, and routes to map change or discovery impact.
 - **`sdd-spec-auditor`** (`flash`, `sandbox`, read-only): Audits `proposal.md` and `tasks.md` for Given-When-Then criteria, security, and shift-left test plans.
 - **`sdd-prompt-architect`** (`flash`, `sandbox`): Generates structured English `prompt-*.md` files in the workspace root.
 
-### 5. Lifecycle Hooks (`hooks.json` & `scripts/`)
+### 6. Lifecycle Hooks (`hooks.json` & `scripts/`)
 - **`sdd-readonly-auto-allow`** (`enabled: true`): Automatically approves safe read-only tool calls and non-destructive inspection commands (`git status/log/diff`, `agy plugin validate`) while guarding sensitive paths (`.env`, `.ssh`, private keys).
 - **`sdd-enforce-proposal`** (`enabled: false`, opt-in): Denies code writes in SDD workspaces (`openspec/` present) unless an approved `proposal.md` exists; passes through (`{}`) in non-SDD workspaces.
 - **`sdd-scope-prompt-writes`** (`enabled: false`, opt-in): Restricts `sdd-prompt-architect` writes strictly to root `prompt*.md` files.
