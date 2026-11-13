@@ -13,7 +13,7 @@ description: >-
 
 ## Purpose
 Produce prompt files that command stronger models, using the templates in
-`resources/prompt-guide.md`, without bloating the main session context.
+[prompt-guide.md](./resources/prompt-guide.md), without bloating the main session context.
 
 ## Step 1 — Gather intent
 Ask the user (pt-BR) only what is missing: goal, target area, and whether a change in

@@ -1,5 +1,6 @@
 {
   "$schema": "https://antigravity.google/schemas/v1/plugin.json",
-  "name": "sdd-scaffold-plugin",
-  "description": "Universal SDD scaffold plugin for Antigravity 2.0. Provisions the full openspec/ spec lifecycle (create, validate, status, archive), modular .agents/ artifact creators (skills, rules, subagents, hooks, MCP servers), and enforces Spec-First, Defensive Security, and Shift-Left Testing conventions in any repository. Includes sdd-prompt-craft and the lightweight sdd-prompt-architect subagent to generate structured prompt files for execution models."
+  "name": "agentic-dev-workflow",
+  "version": "4.0.0",
+  "description": "Adaptive agentic software development and SDD workflow plugin for Antigravity 2.0. Supports both strict Spec-Driven Development (openspec/ create, validate, status, archive, bug-triage) and lightweight/legacy non-SDD projects with explicit opt-out. Includes interactive discovery and tech research workflows, modular .agents/ artifact creators (skills, rules, subagents, hooks, MCP servers), and sdd-prompt-craft with sdd-prompt-architect."
 }

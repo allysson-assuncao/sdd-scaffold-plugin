@@ -8,9 +8,11 @@ description: >-
   audit report with a readiness verdict: Approved, Approved with Reservations,
   or Rejected. Invoke via sdd-spec-validate skill before any implementation begins.
 tools:
-  - view_file
+  - read_file
   - grep_search
   - find_by_name
+  - list_dir
+  - send_message
 subagent: true
 mainAgent: false
 model: flash

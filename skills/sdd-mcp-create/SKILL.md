@@ -52,7 +52,7 @@ Do NOT proceed until the user confirms with "yes".
 
 ## Step 4 — Update mcp_config.json
 
-Read `resources/mcp-server-template.json` for the entry format.
+Read [mcp-server-template.json](./resources/mcp-server-template.json) (in `resources/` adjacent to this `SKILL.md`) for the entry format.
 
 Build the new server entry:
 

@@ -66,7 +66,7 @@ openspec/changes/<change-id>/specs/
 
 **Files:**
 
-`openspec/changes/<change-id>/proposal.md` — Populate using `resources/proposal-template.md` as the base. Replace the placeholder `[Change Title]` with a human-readable version of the change ID (e.g., `add-user-auth` → "Add User Auth"). Set `Change ID` to `<change-id>` and `Created` to today's date (ISO 8601: YYYY-MM-DD).
+`openspec/changes/<change-id>/proposal.md` — Populate using [proposal-template.md](./resources/proposal-template.md) as the base (located in `resources/` adjacent to this `SKILL.md`, e.g., `~/.gemini/config/skills/sdd-spec-create/resources/proposal-template.md`). Replace the placeholder `[Change Title]` with a human-readable version of the change ID (e.g., `add-user-auth` → "Add User Auth"). Set `Change ID` to `<change-id>` and `Created` to today's date (ISO 8601: YYYY-MM-DD). Do NOT attempt to read `resources/` relative to the target workspace root.
 
 `openspec/changes/<change-id>/tasks.md` — Create with this exact content (substituting `<change-id>` and `<change-title>`):
 
@@ -126,7 +126,7 @@ Wait for the subagent's structured report. When received:
      <!-- Describe functional requirements, contracts, or domain updates to merge into the canonical spec -->
      ```
    - **For new subsystems or architectural domains (not yet in `openspec/specs/`):**
-     Create a new canonical spec stub at `openspec/changes/<change-id>/specs/<new-domain>.md` (without `-delta` suffix) conforming to `skills/sdd-init/resources/spec-template.md`.
+     Create a new canonical spec stub at `openspec/changes/<change-id>/specs/<new-domain>.md` (without `-delta` suffix) conforming to [spec-template.md](../sdd-init/resources/spec-template.md).
 
 If `sdd-code-explorer` is unavailable, fall back to the native `research` subagent with the same prompt, and note in the proposal that the scan was performed by the research subagent.
 

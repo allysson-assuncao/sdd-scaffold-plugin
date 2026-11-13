@@ -3,61 +3,68 @@ name: sdd-hook-create
 description: >-
   Use this skill to scaffold lifecycle hook entries in the workspace hooks.json
   file. Guides the user through selecting hook type (PreToolUse, PostToolUse,
-  PreInvocation, PostInvocation), defining tool matchers, and writing portable
-  shell script stubs. Enforces cross-platform portability guidelines. Activate
-  when the user wants to 'add a hook', 'configure PreToolUse hook', 'create a
-  lifecycle hook', or 'add a hooks.json entry'.
+  PreInvocation, PostInvocation, SessionStart, Stop), defining tool matchers,
+  and writing portable cross-platform hook scripts. Activate when the user wants
+  to 'add a hook', 'configure PreToolUse hook', 'create a lifecycle hook', or
+  'add a hooks.json entry'.
 ---
 
 # sdd-hook-create — Scaffold a Lifecycle Hook
 
 ## Purpose
-Add a new hook entry to `hooks.json` (or create it if absent) and optionally scaffold the referenced shell script. Hooks allow Antigravity 2.0 to run external checks before or after specific tool calls.
+Add a new named hook entry to `hooks.json` (or create it if absent) conforming to Antigravity's `map[string]JSONHookSpec` schema, and optionally scaffold the referenced script. Hooks allow Antigravity 2.0 to gate, auto-approve, or audit tool calls and agent turns via a JSON `stdin`/`stdout` contract.
 
 ## Prerequisites
 - Know the **workspace root path** before beginning.
-- Confirm that the target hook **does not conflict** with an existing hook for the same tool and event.
+- Confirm that the target hook name **does not conflict** with an existing top-level hook key in `hooks.json`.
 
 ## Step 1 — Gather Hook Configuration
 
 Ask the user (one question at a time if not already provided):
 
-1. **Hook event type**:
-   - `PreToolUse` — runs BEFORE a tool is invoked. Exit 1 to block the tool call.
-   - `PostToolUse` — runs AFTER a tool completes. Exit 1 to flag a warning.
-   - `PreInvocation` — runs before each agent turn.
-   - `PostInvocation` — runs after each agent turn.
+1. **Hook name (kebab-case)**:
+   - Unique top-level identifier in `hooks.json` (e.g., `sdd-proposal-guard`, `lint-checker`).
 
-2. **Tool matcher**: Which tool(s) should trigger this hook? Examples:
-   - `write_to_file` — single tool
-   - `write_to_file|replace_file_content` — multiple tools (pipe-separated)
+2. **Hook event type**:
+   - `PreToolUse` — runs BEFORE a tool is invoked. Outputs `{"decision": "allow" | "deny" | "ask" | "force_ask", "reason": "..."}` on `stdout`.
+   - `PostToolUse` — runs AFTER a tool completes. Outputs `{}` on `stdout`.
+   - `PreInvocation` — runs before each model call. Outputs `{"injectSteps": [...], "terminationBehavior": ""}` on `stdout`.
+   - `PostInvocation` — runs after tool calls finish.
+   - `SessionStart` — runs once when a new conversation session starts.
+   - `Stop` — runs when the execution loop terminates.
+
+3. **Tool matcher** (required for `PreToolUse` and `PostToolUse` only):
+   - `write_to_file|write_file|replace_file_content|edit_file` — file write tools
+   - `view_file|read_file|grep_search|find_by_name|list_dir` — read-only tools
+   - `run_command` — shell execution tool
    - `*` — all tools
 
-3. **Script path**: Where should the hook script live? Recommend: `.agents/hooks/<descriptive-name>.sh`
+4. **Command / Script path**:
+   - Recommend portable Node.js script: `node .agents/hooks/<hook-name>.mjs` (or `.agents/hooks/<hook-name>.sh` on Unix-only environments).
+   - Note: Antigravity executes hook commands with `cwd` set to the directory containing `hooks.json` (`cmd /c` on Windows, `sh -c` on Unix).
 
-4. **Script purpose**: Brief description of what the script will check/do.
-
-5. **Create script stub**: Should a shell script stub be scaffolded at the script path? (yes/no)
+5. **Create script stub**: Should a script stub be scaffolded at the target path? (yes/no)
 
 ## Step 2 — Resolve hooks.json Path
 
-The hooks.json file lives at the **plugin root** or the **workspace root** depending on context.
-For workspace-level hooks: `<workspace-root>/hooks.json`
+- For workspace-level hooks: `<workspace-root>/.agents/hooks.json` (or `<workspace-root>/hooks.json`).
+- For plugin-level hooks: `<plugin-root>/hooks.json`.
 
-Read `hooks.json` if it exists to understand the current structure.
+Read `hooks.json` if it exists to preserve all existing top-level hook keys.
 
 ## Step 3 — Confirm Before Writing
 
 Display:
-```
+```text
 📋 New Hook — Execution Plan
 
+Hook Name:   <hook-name>
 Event:       <event-type>
 Matcher:     <tool-matcher>
-Script:      <script-path>
+Command:     <command>
 
 Changes to hooks.json:
-  Add entry under "<event-type>": { "matcher": "<matcher>", "command": "<script-path>" }
+  Add top-level key "<hook-name>" with <event-type> handler.
 
 Files to create:
   <script-path>  (stub)   (if requested)
@@ -69,48 +76,83 @@ Do NOT proceed until the user confirms with "yes".
 
 ## Step 4 — Update hooks.json
 
-Read `resources/hook-recipe-template.json` for the entry format.
+Read [hook-recipe-template.json](./resources/hook-recipe-template.json) (in `resources/` adjacent to this `SKILL.md`) for the official `map[string]JSONHookSpec` format.
 
-Add the new hook entry to the appropriate event array in `hooks.json`. If the array does not exist, create it. Preserve all existing entries.
+> [!CAUTION]
+> NEVER add `"$schema"` or `"_comment"` keys at the root of `hooks.json`. The Antigravity Go loader unmarshals every top-level key directly into `jsonhook.JSONHookSpec` and will skip the entire file if any top-level value is a string. Use `"enabled": false` inside a named hook object to disable a hook.
+
+For `PreToolUse` or `PostToolUse` (grouped with `matcher` and `hooks` wrapper):
+```json
+{
+  "<hook-name>": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "<tool-matcher>",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "<command>",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+For `PreInvocation`, `PostInvocation`, `SessionStart`, or `Stop` (flat handler list):
+```json
+{
+  "<hook-name>": {
+    "enabled": true,
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "<command>",
+        "timeout": 10
+      }
+    ]
+  }
+}
+```
 
 ## Step 5 — Scaffold Script Stub (if requested)
 
-Create `.agents/hooks/<script-name>.sh` with:
-```bash
-#!/bin/sh
-# Hook: <event-type> — <tool-matcher>
-# Purpose: <user's description>
-# Exit 0 to allow the tool call. Exit 1 to block it (PreToolUse only).
-# This script receives tool call details via environment variables (check AGY docs).
+Create `.agents/hooks/<hook-name>.mjs` with:
+```javascript
+#!/usr/bin/env node
+import fs from "node:fs";
 
-# TODO: Implement your check logic here.
+function main() {
+  try {
+    const raw = fs.readFileSync(0, "utf8");
+    const payload = raw.trim() ? JSON.parse(raw) : {};
+    // payload.toolCall = { name, args }, payload.workspacePaths = [...]
+    // For PreToolUse: decision can be "allow", "deny", "ask", or "force_ask"
+    process.stdout.write(JSON.stringify({ decision: "allow" }) + "\n");
+  } catch {
+    process.stdout.write("{}\n");
+  }
+}
 
-exit 0
+main();
 ```
-
-Mark the script executable (if on Linux/macOS): note in the confirmation that the user should run `chmod +x <script-path>`.
 
 ## Step 6 — Confirm
 
-```
+```text
 ✅ Hook configured.
 
 hooks.json updated:
+  Hook:    <hook-name>
   Event:   <event-type>
   Matcher: <matcher>
-  Script:  <script-path>
+  Command: <command>
 
-Portability reminders:
-  - Use /bin/sh (not bash) for maximum portability across Linux, macOS, and WSL.
-  - Avoid OS-specific paths. Use relative paths from workspace root.
-  - Do NOT hardcode environment-specific values in the script.
-  - Test on all target platforms before committing.
-  
-If you created a script stub, run: chmod +x <script-path>
-Then implement the logic inside the script.
+Portability & Contract Reminders:
+  - Hook commands read JSON from stdin and MUST output valid JSON on stdout.
+  - Use "node <script>.mjs" for cross-platform compatibility across Windows (cmd /c) and Unix (sh -c).
+  - Run "agy plugin validate ." (if inside a plugin) to verify zero schema errors.
 ```
-
-## Notes
-- Hook scripts must be committed alongside `hooks.json` in version control.
-- An exit code of 1 in a `PreToolUse` hook blocks the tool call — use this carefully.
-- Reference: `.agents/hooks/` is the recommended location for all hook scripts.

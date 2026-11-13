@@ -6,9 +6,11 @@ description: >-
   when a code-impact analysis is needed before writing a proposal or task list.
   Returns a structured report of impacted files, symbols, and suggested spec stubs.
 tools:
-  - view_file
+  - read_file
   - grep_search
   - find_by_name
+  - list_dir
+  - send_message
 subagent: true
 mainAgent: false
 model: flash

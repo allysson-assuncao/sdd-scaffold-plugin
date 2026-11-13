@@ -65,7 +65,7 @@ Do NOT proceed until the user confirms with "yes".
 
 ## Step 4 — Scaffold the Skill
 
-Read `resources/skill-template.md` and substitute:
+Read [skill-template.md](./resources/skill-template.md) (in `resources/` adjacent to this `SKILL.md`) and substitute:
 - `{{SKILL_NAME}}` → the skill name
 - `{{SKILL_DESCRIPTION}}` → the description (preserve line breaks in the YAML block scalar)
 
