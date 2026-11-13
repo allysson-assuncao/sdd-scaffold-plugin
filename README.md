@@ -79,7 +79,3 @@ agy plugin install .
 > Because the plugin identifier in `plugin.json` changed from `sdd-scaffold-plugin` to `agentic-dev-workflow`, remove the legacy `~/.gemini/config/plugins/sdd-scaffold-plugin` directory after installing `agentic-dev-workflow` so rules and skills are not loaded twice.
 
 ---
-
-## License
-
-MIT © Allysson Assunção
