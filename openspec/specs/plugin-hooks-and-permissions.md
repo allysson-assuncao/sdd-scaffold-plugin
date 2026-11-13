@@ -1,7 +1,7 @@
 ---
 id: "spec-plugin-hooks-and-permissions"
 title: "Plugin Lifecycle Hooks & Read-Only Permission Model"
-version: "1.0.0"
+version: "1.1.0"
 status: "active"
 owners:
   - "@allysson-assuncao"
@@ -24,7 +24,7 @@ resources: []
 
 ## Context & Objectives
 
-Defines the lifecycle hook architecture (`hooks.json` and `scripts/*.mjs`) and the read-only subagent permission model for `sdd-scaffold-plugin`. Its primary objective is to eliminate unnecessary interactive permission prompts during safe code-scanning and specification-auditing operations while providing valid, opt-in SDD governance hook recipes that pass `agy plugin validate` across Windows, macOS, and Linux.
+Defines the lifecycle hook architecture (`hooks.json` and `scripts/*.mjs`) and the read-only subagent permission model for `agentic-dev-workflow`. Its primary objective is to eliminate unnecessary interactive permission prompts during safe code-scanning and specification-auditing operations while providing valid, opt-in SDD governance hook recipes that pass `agy plugin validate` across Windows, macOS, and Linux.
 
 ## Functional Requirements
 
@@ -32,8 +32,8 @@ Defines the lifecycle hook architecture (`hooks.json` and `scripts/*.mjs`) and t
 - **[RF-02] Active Read-Only Auto-Allow Hook (`sdd-readonly-auto-allow`):** The plugin MUST ship an enabled `PreToolUse` hook (`sdd-readonly-auto-allow`) matching `view_file|read_file|grep_search|find_by_name|list_dir|run_command` backed by `node scripts/sdd-readonly-guard.mjs`.
 - **[RF-03] Safe Tool & Sensitive-Path Filtering:** `scripts/sdd-readonly-guard.mjs` MUST output `{"decision": "allow"}` for native read/search tools (`view_file`, `read_file`, `grep_search`, `find_by_name`, `list_dir`) UNLESS the target path matches sensitive credential patterns (`.env`, `.ssh`, `.aws`, `.npmrc`, `.pypirc`, private keys, or credential files), in which case it MUST output `{}` to defer to standard user confirmation.
 - **[RF-04] Read-Only Shell Command Filtering:** For `run_command` invocations, `scripts/sdd-readonly-guard.mjs` MUST only output `{"decision": "allow"}` when `CommandLine` matches an explicit allowlist of non-destructive inspection commands (`git status`, `git log`, `git diff`, `git show`, `git branch`, `agy plugin validate`, `Get-ChildItem`, `Select-String`, `Test-Path`, `ls`, `pwd`, `wc`) and contains no shell redirection, command substitution, or command chaining operators (`>`, `<`, `|`, `;`, `&`, `$()`, backticks).
-- **[RF-05] Opt-In SDD Governance Hook Recipes:** `hooks.json` MUST include `sdd-enforce-proposal`, `sdd-scope-prompt-writes`, and `sdd-run-linter` configured with `"enabled": false` and backed by existing scripts in `scripts/` so users can enable them without triggering missing-script warnings during `agy plugin validate`.
-- **[RF-06] Read-Only Subagent Tool Completeness:** `agents/sdd-code-explorer.md` and `agents/sdd-spec-auditor.md` MUST explicitly declare `view_file`, `read_file`, `grep_search`, `find_by_name`, `list_dir`, and `send_message` in their `tools:` YAML frontmatter, while omitting all file-mutation and shell-execution tools.
+- **[RF-05] Opt-In SDD Governance Hook Recipes:** `hooks.json` MUST include `sdd-enforce-proposal`, `sdd-scope-prompt-writes`, and `sdd-run-linter` configured with `"enabled": false` and backed by existing scripts in `scripts/`. When `sdd-enforce-proposal` (`scripts/check-approved-proposal.mjs`) is invoked, it MUST first inspect whether `openspec/` exists in the workspace root: if `openspec/` does not exist (non-SDD workspace), it MUST fail open and output `{}` (pass-through); if `openspec/` exists, it MUST allow writes targeting `openspec/` or `.agents/` and deny other writes unless an active `openspec/changes/<id>/proposal.md` contains `**Status:** approved`.
+- **[RF-06] Read-Only Subagent Tool Completeness:** `agents/sdd-code-explorer.md` and `agents/sdd-spec-auditor.md` MUST explicitly declare `read_file`, `grep_search`, `find_by_name`, `list_dir`, and `send_message` in their `tools:` YAML frontmatter, while omitting all file-mutation and shell-execution tools and legacy aliases (`view_file`, `write_to_file`).
 
 ## Non-Functional Requirements
 
@@ -50,3 +50,4 @@ Defines the lifecycle hook architecture (`hooks.json` and `scripts/*.mjs`) and t
 | Version | Date | Author | Summary |
 |---------|------|--------|---------|
 | 1.0.0 | 2026-11-05 | @allysson-assuncao | Initial canonical specification (`feat-hooks-and-readonly-permissions`) |
+| 1.1.0 | 2026-11-13 | @allysson-assuncao | Pass-through in `check-approved-proposal.mjs` when `openspec/` is absent and update plugin identifier (`feat-hybrid-mode-and-rebrand`) |

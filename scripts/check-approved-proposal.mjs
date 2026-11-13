@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // check-approved-proposal.mjs
-// Opt-in PreToolUse recipe hook for sdd-scaffold-plugin ("sdd-enforce-proposal").
-// Blocks file-mutation tool calls unless at least one active change in
-// <workspace>/openspec/changes/<change-id>/proposal.md has Status: approved,
-// or the target file itself is inside openspec/ or .agents/.
+// Opt-in PreToolUse recipe hook for agentic-dev-workflow ("sdd-enforce-proposal").
+// In SDD workspaces (where <workspace>/openspec/ exists), blocks file-mutation
+// tool calls unless at least one active change in openspec/changes/<id>/proposal.md
+// has Status: approved, or the target file itself is inside openspec/ or .agents/.
+// In non-SDD workspaces (no openspec/ directory), fails open ({}) as a pass-through.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -26,11 +27,23 @@ function hasApprovedProposal(workspaceRoot) {
   return false;
 }
 
+function isSafeNamespaceWrite(workspaceRoot, targetPath) {
+  if (typeof targetPath !== "string" || !targetPath.trim()) return false;
+  if (typeof workspaceRoot === "string" && workspaceRoot.trim()) {
+    const resolvedRoot = path.resolve(workspaceRoot);
+    const resolvedTarget = path.resolve(resolvedRoot, targetPath);
+    const rel = path.relative(resolvedRoot, resolvedTarget);
+    if (rel.startsWith("..") || path.isAbsolute(rel)) return false;
+    return /^(?:openspec|\.agents)(?:[\\/]|$)/i.test(rel);
+  }
+  return /(?:^|[\\/])(?:openspec|\.agents)[\\/]/i.test(targetPath);
+}
+
 function main() {
   try {
     const rawInput = fs.readFileSync(0, "utf8");
     if (!rawInput || !rawInput.trim()) {
-      process.stdout.write(JSON.stringify({ decision: "allow" }) + "\n");
+      process.stdout.write("{}\n");
       return;
     }
 
@@ -41,10 +54,17 @@ function main() {
       payload?.toolCall?.args?.TargetFile ??
       "";
 
+    // Pass-through in non-SDD workspaces (where openspec/ does not exist)
     if (
-      typeof targetPath === "string" &&
-      /(?:^|[\\/])(?:openspec|\.agents)[\\/]/i.test(targetPath)
+      typeof workspaceRoot !== "string" ||
+      !workspaceRoot.trim() ||
+      !fs.existsSync(path.join(workspaceRoot, "openspec"))
     ) {
+      process.stdout.write("{}\n");
+      return;
+    }
+
+    if (isSafeNamespaceWrite(workspaceRoot, targetPath)) {
       process.stdout.write(
         JSON.stringify({
           decision: "allow",
@@ -54,7 +74,7 @@ function main() {
       return;
     }
 
-    if (workspaceRoot && hasApprovedProposal(workspaceRoot)) {
+    if (hasApprovedProposal(workspaceRoot)) {
       process.stdout.write(
         JSON.stringify({
           decision: "allow",
@@ -72,7 +92,7 @@ function main() {
       }) + "\n"
     );
   } catch {
-    process.stdout.write(JSON.stringify({ decision: "allow" }) + "\n");
+    process.stdout.write("{}\n");
   }
 }
 

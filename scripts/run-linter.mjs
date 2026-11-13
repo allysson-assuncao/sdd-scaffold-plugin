@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * run-linter.mjs
- * Opt-in PostToolUse recipe hook stub for sdd-scaffold-plugin ("sdd-run-linter").
+ * Opt-in PostToolUse recipe hook stub for agentic-dev-workflow ("sdd-run-linter").
  * PostToolUse hooks must output an empty JSON object {} on stdout.
  */
 

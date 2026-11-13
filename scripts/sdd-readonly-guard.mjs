@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // sdd-readonly-guard.mjs
-// PreToolUse hook for sdd-scaffold-plugin.
+// PreToolUse hook for agentic-dev-workflow.
 // Automatically approves ("decision": "allow") non-destructive read/search tools
 // (view_file, read_file, grep_search, find_by_name, list_dir) and strictly
 // read-only diagnostic commands (run_command), while returning {"decision": "ask"}
