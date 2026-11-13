@@ -23,7 +23,7 @@ Guidelines and modular templates for generating high-precision, token-efficient 
 ## 2. Modular Prompt Templates
 
 ### Template 1: Discovery & Architecture Alignment (`/grill-me`)
-*Use for ambiguous requirements, design trade-offs, or initial impact discovery before planning. The prompt provides initial seed questions based on user context, but the executing agent retains full autonomy to raise any additional questions discovered during analysis.*
+*Use when generating a standalone `prompt-discovery.md` file for ambiguous requirements, design trade-offs, or initial impact discovery in a separate execution session. (Note: when the user wants live interactive investigation and `/grill-me` alignment directly in the current chat session rather than generating a prompt file, activate the `discovery-align` or `tech-research` skill instead.) The prompt provides initial seed questions based on user context, but the executing agent retains full autonomy to raise any additional questions discovered during analysis.*
 
 ````text
 Focus: [Domain/Stack]
